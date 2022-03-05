@@ -1,0 +1,59 @@
+package frc.robot;
+
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.AnalogInput;
+
+public class ThriftyEncoder implements Supplier<Rotation2d> {
+    public AnalogInput input;
+    public Rotation2d rotOffset;
+    public double readVoltageMax;
+
+    private static double standardReadVoltageMax = 4.8;
+
+    public ThriftyEncoder(AnalogInput input, double readVoltageMax) {
+        this.input = input;
+        this.rotOffset = new Rotation2d(0.0);
+        this.readVoltageMax = readVoltageMax;
+    }
+
+    public ThriftyEncoder(AnalogInput input, Rotation2d rotOffset, double readVoltageMax) {
+        this.input = input;
+        this.rotOffset = rotOffset;
+        this.readVoltageMax = readVoltageMax;
+    }
+
+    public ThriftyEncoder(AnalogInput input) {
+        this.input = input;
+        this.rotOffset = new Rotation2d(0.0);
+        this.readVoltageMax = ThriftyEncoder.standardReadVoltageMax;
+    }
+
+    public ThriftyEncoder(AnalogInput input, Rotation2d rotOffset) {
+        this.input = input;
+        this.rotOffset = rotOffset;
+        this.readVoltageMax = ThriftyEncoder.standardReadVoltageMax;
+    }
+    
+    public Rotation2d getRawPosition() {
+        return new Rotation2d(
+            this.getRawPositionRadians()
+        );
+    }
+
+    public double getPositionRadians() {
+        return this.getRawPositionRadians() + this.rotOffset.getRadians();
+    }
+
+    public Rotation2d getPosition() {
+        return this.getRawPosition().plus(this.rotOffset);
+    }
+
+    public double getRawPositionRadians() {
+        return (input.getVoltage() * 2 * Math.PI) / this.readVoltageMax;
+    }
+
+    public Rotation2d get()
+    { return this.getPosition(); }
+}
