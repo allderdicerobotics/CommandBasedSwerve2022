@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeActuation;
+import frc.robot.subsystems.RigidClimbers;
+import frc.robot.subsystems.RotatingClimbers;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -25,6 +27,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem robotDrive = new DriveSubsystem();
   private final IntakeActuation intakeActuation = new IntakeActuation();
+  private final RigidClimbers rigidClimbers = new RigidClimbers();
+  private final RotatingClimbers rotatingClimbers = new RotatingClimbers();
   // private final Indexer m_indexer = new Indexer();
   // private final IntakerRod m_intakerRod = new IntakerRod();
   // private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
@@ -74,6 +78,34 @@ public class RobotContainer {
         new RunCommand(() -> {
           intakeActuation.setGoal(0.7);
         }));
+
+    new JoystickButton(driverController, 3).whenHeld(
+        new StartEndCommand(() -> {
+          rigidClimbers.setSpeed(0.25);
+        }, () -> {
+          rigidClimbers.setSpeed(0);
+        }, rigidClimbers));
+
+    new JoystickButton(driverController, 4).whenHeld(
+        new StartEndCommand(() -> {
+          rigidClimbers.setSpeed(-0.25);
+        }, () -> {
+          rigidClimbers.setSpeed(0);
+        }, rigidClimbers));
+
+    new JoystickButton(driverController, 5).whenHeld(
+        new StartEndCommand(() -> {
+          rotatingClimbers.setSpeed(0.25);
+        }, () -> {
+          rotatingClimbers.setSpeed(0);
+        }, rotatingClimbers));
+
+    new JoystickButton(driverController, 6).whenHeld(
+        new StartEndCommand(() -> {
+          rotatingClimbers.setSpeed(-0.25);
+        }, () -> {
+          rotatingClimbers.setSpeed(0);
+        }, rotatingClimbers));
 
     // new JoystickButton(m_driverController, buttonNumber)
     // new JoystickButton(buttonBoard, 2).whileActiveOnce(
