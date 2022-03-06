@@ -13,7 +13,7 @@ import frc.robot.Constants;
 
 public class IntakeActuation extends ProfiledPIDSubsystem {
 
-  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(0.39, 0.07, 0.46);
+  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(1.0, 2.0, 0.46);
 
   private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort,
       MotorType.kBrushless);
@@ -30,9 +30,10 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     double feedforward = actuationFeedforward.calculate(setpoint.position, setpoint.velocity);
 
     // Add the feedforward to the PID output to get the motor output
-
+    // System.out.println("voltage set");
     leadingActuationMotor.setVoltage(output + feedforward);
-    SmartDashboard.putNumber("Intake Actuation Voltage", output + feedforward);
+    SmartDashboard.putNumber("Intake Actuation PID Output", output);
+    SmartDashboard.putNumber("Intake Actuation FF Output", feedforward);
   }
 
   @Override
@@ -46,7 +47,7 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     super(new ProfiledPIDController(0.0001, 0, 0,
         new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
             Constants.IntakeConstants.kMaxAngularAcceleration)));
-    leadingActuationMotor.setInverted(false);
+    leadingActuationMotor.setInverted(true);
     actuationEncoder = leadingActuationMotor.getEncoder();
     actuationEncoder.setPositionConversionFactor(2 * Math.PI / 20);
     actuationEncoder.setVelocityConversionFactor(2 * Math.PI / 20);

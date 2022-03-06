@@ -72,8 +72,7 @@ public class RobotContainer {
 
     new JoystickButton(driverController, 2).whenHeld(
         new RunCommand(() -> {
-          intakeActuation.setGoal(-0.7);
-
+          intakeActuation.setGoal(0.7);
         }));
 
     // new JoystickButton(m_driverController, buttonNumber)
