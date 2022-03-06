@@ -16,14 +16,10 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.ThriftyEncoder;
 
 public class SwerveModule {
-  private static final double kWheelRadius = 0.0508;
-  private static final double kDriveWheelGearRatio = 6.55;
-
-  private static final double kModuleMaxAngularVelocity = 4 * 2 * Math.PI;
-  private static final double kModuleMaxAngularAcceleration = 4 * 2 * Math.PI; // radians per second squared
 
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
@@ -37,8 +33,8 @@ public class SwerveModule {
   private final SparkMaxPIDController m_drivePIDController;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1.1, 0, 0,
-      new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1.1, 0, 0, new TrapezoidProfile.Constraints(
+      Constants.ModuleConstants.kModuleMaxAngularVelocity, Constants.ModuleConstants.kModuleMaxAngularAcceleration));
 
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.33217, 2.5407, 0.52052);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.25, 0.2);
@@ -132,26 +128,15 @@ public class SwerveModule {
     SmartDashboard.putNumber("turn voltage out" + this.m_turningMotor.getDeviceId(), turnOutput);
 
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
-    final double driveMotorRPM = state.speedMetersPerSecond * 60 / Math.PI / kWheelRadius / 2 * kDriveWheelGearRatio;
+    final double driveMotorRPM = state.speedMetersPerSecond * 60 / Math.PI / Constants.ModuleConstants.kWheelRadius / 2
+        * Constants.ModuleConstants.kDriveWheelGearRatio;
     m_drivePIDController.setReference(driveMotorRPM, ControlType.kVelocity, 2, driveFeedforward, ArbFFUnits.kVoltage);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
-  // final double driveOutput =
-  // m_drivePIDController.calculate(m_driveEncoder.getRate(),
-  // state.speedMetersPerSecond);
-
-  // // Calculate the turning motor output from the turning PID controller.
-  // final double turnOutput =
-  // m_turningPIDController.calculate(m_turningEncoder.get(),
-  // state.angle.getRadians());
-
-  // // Calculate the turning motor output from the turning PID controller.
-  // m_driveMotor.set(driveOutput);
-  // m_turningMotor.set(turnOutput);
-  // }
 
   /** Zeros all the SwerveModule encoders. */
-  // public void resetEncoders() {
-  // m_driveEncoder.reset();
-  // m_turningEncoder.reset();
+  public void resetEncoders() {
+    m_driveEncoder.reset();
+    m_turningEncoder.reset();
+  }
 }

@@ -46,12 +46,12 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     setGoal(0);
   }
 
-  public void SetPositionUp() {
+  public void setPositionUp() {
     setGoal(0);
     System.out.println("intake up");
   }
 
-  public void SetPositionDown() {
+  public void setPositionDown() {
     setGoal(3);
     System.out.println("intake down");
   }

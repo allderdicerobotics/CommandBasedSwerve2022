@@ -35,11 +35,9 @@ public class ThriftyEncoder implements Supplier<Rotation2d> {
         this.rotOffset = rotOffset;
         this.readVoltageMax = ThriftyEncoder.standardReadVoltageMax;
     }
-    
+
     public Rotation2d getRawPosition() {
-        return new Rotation2d(
-            this.getRawPositionRadians()
-        );
+        return new Rotation2d(this.getRawPositionRadians());
     }
 
     public double getPositionRadians() {
@@ -54,6 +52,11 @@ public class ThriftyEncoder implements Supplier<Rotation2d> {
         return (input.getVoltage() * 2 * Math.PI) / this.readVoltageMax;
     }
 
-    public Rotation2d get()
-    { return this.getPosition(); }
+    public Rotation2d get() {
+        return this.getPosition();
+    }
+
+    public void resetPosition() {
+        rotOffset = getRawPosition();
+    }
 }
