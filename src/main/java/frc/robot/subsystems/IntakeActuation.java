@@ -13,7 +13,7 @@ import frc.robot.Constants;
 
 public class IntakeActuation extends ProfiledPIDSubsystem {
 
-  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(1.0, 2.0, 0.46);
+  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(1.0, 6.0, 3.0);
 
   private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort,
       MotorType.kBrushless);
@@ -44,13 +44,14 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
   }
 
   public IntakeActuation() {
-    super(new ProfiledPIDController(0.0001, 0, 0,
+    super(new ProfiledPIDController(7.5, 0, 0,
         new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
             Constants.IntakeConstants.kMaxAngularAcceleration)));
     leadingActuationMotor.setInverted(true);
     actuationEncoder = leadingActuationMotor.getEncoder();
     actuationEncoder.setPositionConversionFactor(2 * Math.PI / 20);
     actuationEncoder.setVelocityConversionFactor(2 * Math.PI / 20);
+    // actuationEncoder.setInverted(true);
     followingActuationMotor.follow(leadingActuationMotor, true);
 
     // setGoal(0);
