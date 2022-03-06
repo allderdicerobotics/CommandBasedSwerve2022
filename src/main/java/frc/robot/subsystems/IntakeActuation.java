@@ -1,72 +1,58 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants;
 
-public class IntakeActuation extends SubsystemBase {
+public class IntakeActuation extends ProfiledPIDSubsystem {
 
-  private RelativeEncoder m_actuationEncoder;
- 
+  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(0.01, 0.0001, 0, 0);
 
-  private final ProfiledPIDController m_actuationPidController =
-  new ProfiledPIDController(
-      2.0,
-      0,
-      0,
-      new TrapezoidProfile.Constraints(
-          Constants.IntakeConstants.kMaxAngularVelocity, Constants.IntakeConstants.kMaxAngularAcceleration));
+  private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort, MotorType.kBrushless);
 
-private final ArmFeedforward m_actuationFeedforward = new ArmFeedforward(0.01, 0.0001, 0, 0);
+  private final CANSparkMax followingActuationMotor = new CANSparkMax(Constants.IntakeConstants.rightActuationPort, MotorType.kBrushless);
 
-  private double currentSetpoint = 0;
-
-  private final CANSparkMax LeftActuationMotor = new CANSparkMax(
-    Constants.IntakeConstants.leftActuationPort,
-    MotorType.kBrushless
-  );
-
-  private final CANSparkMax RightActuationMotor = new CANSparkMax(
-    Constants.IntakeConstants.rightActuationPort,
-    MotorType.kBrushless
-  );
-
-  public IntakeActuation() {
-    RightActuationMotor.follow(LeftActuationMotor, true);
-
-    //m_actuationPID = LeftActuationMotor.getPIDController();
-    m_actuationEncoder = LeftActuationMotor.getEncoder();
-  }
-
+  private RelativeEncoder actuationEncoder;
 
   @Override
-  public void periodic() {
-    final double pidOutput = m_actuationPidController.calculate(m_actuationEncoder.getPosition(), currentSetpoint);
-    final double ffOutput = m_actuationFeedforward.calculate(currentSetpoint, 1);
-    System.out.println(pidOutput + ffOutput);
-    LeftActuationMotor.setVoltage(pidOutput + ffOutput);
+  public void useOutput(double output, TrapezoidProfile.State setpoint) {
+    // Calculate the feedforward from the sepoint
+
+    double feedforward = actuationFeedforward.calculate(setpoint.position, setpoint.velocity);
+
+    // Add the feedforward to the PID output to get the motor output
+
+    leadingActuationMotor.setVoltage(output + feedforward);
   }
 
-  public void setPosition(double desiredPosition) {
-    this.currentSetpoint = desiredPosition;
+  @Override
+  public double getMeasurement() {
+    return actuationEncoder.getPosition();
+  }
+
+  public IntakeActuation() {
+    super(new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
+        Constants.IntakeConstants.kMaxAngularAcceleration)));
+
+    followingActuationMotor.follow(leadingActuationMotor, true);
+
+    actuationEncoder = leadingActuationMotor.getEncoder();
+    setGoal(0);
   }
 
   public void SetPositionUp() {
-    setPosition(0);
+    setGoal(0);
     System.out.println("intake up");
   }
 
   public void SetPositionDown() {
-    setPosition(3);
+    setGoal(3);
     System.out.println("intake down");
   }
 }
