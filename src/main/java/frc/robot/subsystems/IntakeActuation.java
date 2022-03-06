@@ -7,12 +7,13 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants;
 
 public class IntakeActuation extends ProfiledPIDSubsystem {
 
-  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(1.41, 2.45, 0.46);
+  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(0.39, 0.07, 0.46);
 
   private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort,
       MotorType.kBrushless);
@@ -31,31 +32,37 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     // Add the feedforward to the PID output to get the motor output
 
     leadingActuationMotor.setVoltage(output + feedforward);
+    SmartDashboard.putNumber("Intake Actuation Voltage", output + feedforward);
   }
 
   @Override
   public double getMeasurement() {
+    SmartDashboard.putNumber("Intake Actuation Position", actuationEncoder.getPosition());
+    // SmartDashboard.putNumber("Intake Actuation Setpoint", );
     return actuationEncoder.getPosition();
   }
 
   public IntakeActuation() {
-    super(new ProfiledPIDController(0, 0, 0,
+    super(new ProfiledPIDController(0.0001, 0, 0,
         new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
             Constants.IntakeConstants.kMaxAngularAcceleration)));
-
+    leadingActuationMotor.setInverted(false);
+    actuationEncoder = leadingActuationMotor.getEncoder();
+    actuationEncoder.setPositionConversionFactor(2 * Math.PI / 20);
+    actuationEncoder.setVelocityConversionFactor(2 * Math.PI / 20);
     followingActuationMotor.follow(leadingActuationMotor, true);
 
-    actuationEncoder = leadingActuationMotor.getEncoder();
-    setGoal(0);
+    // setGoal(0);
+    enable();
   }
 
   public void setPositionUp() {
-    setGoal(0);
+    setGoal(1.5);
     System.out.println("intake up");
   }
 
   public void setPositionDown() {
-    setGoal(3);
+    setGoal(0);
     System.out.println("intake down");
   }
 }

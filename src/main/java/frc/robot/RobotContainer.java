@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -55,8 +56,25 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 1).whileActiveOnce(
-        new StartEndCommand(() -> intakeActuation.setPositionDown(), () -> intakeActuation.setPositionUp(), intakeActuation));
+    // new JoystickButton(driverController, 1).whileActiveOnce(
+    // new StartEndCommand(() -> {
+    // intakeActuation.setPositionDown();
+    // intakeActuation.enable();
+    // }, () -> {
+    // intakeActuation.setPositionUp();
+    // intakeActuation.enable();
+    // }, intakeActuation));
+    new JoystickButton(driverController, 1).whenHeld(
+        new RunCommand(() -> {
+          intakeActuation.setGoal(0);
+
+        }));
+
+    new JoystickButton(driverController, 2).whenHeld(
+        new RunCommand(() -> {
+          intakeActuation.setGoal(-0.7);
+
+        }));
 
     // new JoystickButton(m_driverController, buttonNumber)
     // new JoystickButton(buttonBoard, 2).whileActiveOnce(
