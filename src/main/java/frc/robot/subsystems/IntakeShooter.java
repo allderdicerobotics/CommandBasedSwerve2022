@@ -17,6 +17,10 @@ public class IntakeShooter extends SubsystemBase {
     intakeShooterMotor.set(speed);
   }
 
+  public void stop() {
+    intakeShooterMotor.stop();
+  }
+
   public void runIn() {
     setSpeed(5.0); // TODO: find actual speed
   }

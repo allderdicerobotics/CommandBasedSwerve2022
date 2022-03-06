@@ -4,14 +4,10 @@
 
 package frc.robot.subsystems;
 
-// import org.photonvision.PhotonCamera;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
-// import frc.robot.commands.LogCameraCommand;
 
 public class Indexer extends SubsystemBase {
 
@@ -20,6 +16,10 @@ public class Indexer extends SubsystemBase {
 
   public void spinIndexer(double speed) {
     indexerMotor.set(speed);
+  }
+
+  public void stop() {
+    indexerMotor.stop();
   }
 
   public void indexerIn() {
