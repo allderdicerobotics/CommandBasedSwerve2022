@@ -15,7 +15,7 @@ public class IntakeIn extends SequentialCommandGroup {
 		Indexer indexer
 	) {
 		addCommands(
-			new ActuationTo(actuation, ActuationT.DOWN),
+			ActuationHelpers.toUnchecked(actuation, ActuationT.DOWN),
 			new RunIntake(intakeShooter, indexer, actuation)
 		);
 	}
