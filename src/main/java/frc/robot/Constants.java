@@ -71,8 +71,8 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int rightRigidClimberPort = 8;
     public static final int leftRigidClimberPort = 9;
-    public static final int rightTiltingClimberPort = 6;
-    public static final int leftTiltingClimberPort = 7;
+    public static final int rightRotatingClimberPort = 6;
+    public static final int leftRotatingClimberPort = 7;
 
   }
 
