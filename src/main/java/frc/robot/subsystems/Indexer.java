@@ -15,17 +15,18 @@ import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
 
-  private final CANSparkMax m_indexerMotor = new CANSparkMax(Constants.IntakeConstants.indexerMotorPort, MotorType.kBrushless);
+  private final CANSparkMax indexerMotor = new CANSparkMax(Constants.IntakeConstants.indexerMotorPort,
+      MotorType.kBrushless);
 
-  public void SpinIndexer(double speed) {
-    m_indexerMotor.set(speed);
+  public void spinIndexer(double speed) {
+    indexerMotor.set(speed);
   }
 
-  public void IndexerIn() {
-    SpinIndexer(5.0); //check speed
+  public void indexerIn() {
+    spinIndexer(5.0); // check speed
   }
 
-  public void IndexerOut() {
-    SpinIndexer(5.0); //check speed
+  public void indexerOut() {
+    spinIndexer(5.0); // check speed
   }
 }

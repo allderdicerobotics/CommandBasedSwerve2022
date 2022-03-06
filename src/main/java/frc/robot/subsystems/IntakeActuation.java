@@ -12,11 +12,13 @@ import frc.robot.Constants;
 
 public class IntakeActuation extends ProfiledPIDSubsystem {
 
-  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(0.01, 0.0001, 0, 0);
+  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(1.41, 2.45, 0.46);
 
-  private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort, MotorType.kBrushless);
+  private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort,
+      MotorType.kBrushless);
 
-  private final CANSparkMax followingActuationMotor = new CANSparkMax(Constants.IntakeConstants.rightActuationPort, MotorType.kBrushless);
+  private final CANSparkMax followingActuationMotor = new CANSparkMax(Constants.IntakeConstants.rightActuationPort,
+      MotorType.kBrushless);
 
   private RelativeEncoder actuationEncoder;
 
@@ -37,8 +39,9 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
   }
 
   public IntakeActuation() {
-    super(new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
-        Constants.IntakeConstants.kMaxAngularAcceleration)));
+    super(new ProfiledPIDController(0, 0, 0,
+        new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
+            Constants.IntakeConstants.kMaxAngularAcceleration)));
 
     followingActuationMotor.follow(leadingActuationMotor, true);
 
