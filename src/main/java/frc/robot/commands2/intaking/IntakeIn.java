@@ -6,9 +6,8 @@ public class IntakeIn extends SequentialCommandGroup {
 		IntakeShooter intakeShooter,
 		Indexer indexer
 	) {
-		addRequirements(actuation, intakeShooter, indexer);
 		addCommands(
-			new InstantCommand(actuation::setPosositionUp, actuation),
+			new InstantCommand(actuation::setPositionUp, actuation),
 			new RunIntake(intakeShooter, indexer, actuation)
 		);
 	}
