@@ -6,7 +6,7 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class ClimbMid extends SequentialCommandGroup {
 	public ClimbMid(ClimberControl climber, DriveSubsystem drive) {
-		Rotation2D forward, backward, neutral; // TODO
+		double forward, backward, neutral; // TODO
 		addCommands(
 				climber.to(new ClimberPos(ClimberConstants.RIGID_MAX, ClimberConstants.R_FORWARD)),
 				DriveHelpers.timedBackwards(drive, ClimberConstants.DRIVE_BACK_TIME_SECS), // TODO
