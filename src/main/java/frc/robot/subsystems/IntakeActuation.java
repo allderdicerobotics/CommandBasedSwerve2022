@@ -13,12 +13,12 @@ import frc.robot.Constants;
 
 public class IntakeActuation extends ProfiledPIDSubsystem {
 
-  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(1.0, 6.0, 3.0);
+  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(1.0, 1.75, 0.25);
 
-  private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort,
+  private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.rightActuationPort,
       MotorType.kBrushless);
 
-  private final CANSparkMax followingActuationMotor = new CANSparkMax(Constants.IntakeConstants.rightActuationPort,
+  private final CANSparkMax followingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort,
       MotorType.kBrushless);
 
   private RelativeEncoder actuationEncoder;
@@ -44,10 +44,15 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
   }
 
   public IntakeActuation() {
-    super(new ProfiledPIDController(7.5, 0, 0,
+    super(new ProfiledPIDController(6.0, 3.0, 0.0,
         new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
             Constants.IntakeConstants.kMaxAngularAcceleration)));
-    leadingActuationMotor.setInverted(true);
+
+    final ProfiledPIDController pidController = getController();
+    pidController.setTolerance(0.025);
+    pidController.setIntegratorRange(-2.0, 2.0);
+    // System.out.println(pidController.);
+    leadingActuationMotor.setInverted(false);
     actuationEncoder = leadingActuationMotor.getEncoder();
     actuationEncoder.setPositionConversionFactor(2 * Math.PI / 20);
     actuationEncoder.setVelocityConversionFactor(2 * Math.PI / 20);
