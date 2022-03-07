@@ -16,6 +16,9 @@ public class RigidClimbers extends SubsystemBase {
     private final MotorControllerGroup m_rigidClimberGroup = new MotorControllerGroup(m_leftRigidClimber,
             m_rightRigidClimber);
 
+    private final double MIN_SETPOINT = null; // TODO
+    private final double MAX_SETPOINT = null; // TODO
+
     public boolean closeToPosition(double position) {
         double setp = this.posToSetpoint(position);
 	// TODO check `setp`
@@ -24,6 +27,13 @@ public class RigidClimbers extends SubsystemBase {
     public void setPosition(double position) {
         double setp = this.posToSetpoint(position);
 	// TODO make this work with `setp`
+    }
+
+    public double posToSetpoint(double position) {
+        return (new MapValues())
+		.from(0.0, 1.0)
+		.to(MIN_SETPOINT, MAX_SETPOINT)
+		.apply(position);
     }
 
     // public void setSpeed(double desiredSpeed) {
