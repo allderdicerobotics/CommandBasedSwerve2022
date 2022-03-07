@@ -4,23 +4,23 @@ import frc.robot.subsystems.IntakeActuation;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public static class ActuationHelpers {
 	public static ParallelRaceGroup checkedTo(IntakeActuation actuation, ActuationT to) {
 		return uncheckedTo(actuation).until(
-			() -> {
-				switch (to) {
-					case ActuationT.UP:
-						return actuation.isUp();
-						break;
-					case ActuationT.DOWN:
-						return actuation.isDown();
-						break;
-					default:
-						throw new Exception("unreachable");
-				}
-			}
-		);
+				() -> {
+					switch (to) {
+						case ActuationT.UP:
+							return actuation.isUp();
+							break;
+						case ActuationT.DOWN:
+							return actuation.isDown();
+							break;
+						default:
+							throw new Exception("unreachable");
+					}
+				});
 	}
 
 	public static CommandBase uncheckedTo(IntakeActuation actuation, ActuationT to) {
@@ -36,4 +36,3 @@ public static class ActuationHelpers {
 		}
 	}
 }
-
