@@ -7,9 +7,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ClimberPos {
 	private final double rigidHeight;
-	private final Rotation2d rotatingAngle;
+	private final double rotatingAngle;
 
-	public ClimberPos(double rigidHeight, Rotation2d rotatingAngle) {
+	public ClimberPos(double rigidHeight, double rotatingAngle) {
 		this.rigidHeight = rigidHeight;
 		this.rotatingAngle = rotatingAngle;
 	}
