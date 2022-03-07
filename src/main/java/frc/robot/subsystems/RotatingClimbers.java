@@ -16,9 +16,9 @@ public class RotatingClimbers extends SubsystemBase {
     private final MotorControllerGroup rotatingClimberGroup = new MotorControllerGroup(leftRotatingClimber,
             rightRotatingClimber);
 
-    // public void SetPosition(double position) {
-
-    // }
+    public void setAngle(double anglePosition) {
+        // TODO make this work
+    }
 
     public void setSpeed(double desiredSpeed) {
         rotatingClimberGroup.set(desiredSpeed); // TODO: change to position

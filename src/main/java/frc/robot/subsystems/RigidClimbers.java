@@ -8,31 +8,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class RigidClimbers extends SubsystemBase {
-    private final CANSparkMax leftRigidClimber = new CANSparkMax(Constants.ClimberConstants.leftRigidClimberPort,
+    private final CANSparkMax m_leftRigidClimber = new CANSparkMax(Constants.ClimberConstants.leftRigidClimberPort,
             MotorType.kBrushless);
-    private final CANSparkMax rightRigidClimber = new CANSparkMax(Constants.ClimberConstants.rightRigidClimberPort,
+    private final CANSparkMax m_rightRigidClimber = new CANSparkMax(Constants.ClimberConstants.rightRigidClimberPort,
             MotorType.kBrushless);
 
-    private final MotorControllerGroup rigidClimberGroup = new MotorControllerGroup(leftRigidClimber,
-            rightRigidClimber);
+    private final MotorControllerGroup m_rigidClimberGroup = new MotorControllerGroup(m_leftRigidClimber,
+            m_rightRigidClimber);
 
-    // public void SetPosition(double position) {
+    public boolean closeToPosition(double position) {
+        double setp = this.posToSetpoint(position);
+	// TODO check `setp`
+    }
 
+    public void setPosition(double position) {
+        double setp = this.posToSetpoint(position);
+	// TODO make this work with `setp`
+    }
+
+    // public void setSpeed(double desiredSpeed) {
+    //     m_rigidClimberGroup.set(desiredSpeed); // xTODO: change to position
     // }
-
-    public void setSpeed(double desiredSpeed) {
-        rigidClimberGroup.set(desiredSpeed); // TODO: change to position
-    }
-
-    public void setPositon(double desiredPositon) {
-        // TODO: PID set reference
-    }
-
-    public void setPositionHighest() {
-        setPositon(0.0); // TODO: whatever the highest position will be
-    }
-
-    public void setPositionLowest() {
-        setPositon(5.0); // TODO: whatever the highest position will be
-    }
 }
