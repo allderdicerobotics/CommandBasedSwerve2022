@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -77,6 +80,17 @@ public final class Constants {
     public static final int rightRotatingClimberPort = 6;
     public static final int leftRotatingClimberPort = 7;
 
+    public static final double rigidPIDTolerance = 2;
+    public static final double rotatingPIDTolerance = 2;
+
+    public static final double maxRigidSetpoint = 10;
+    public static final double minRigidSetpoint = 0;
+
+    public static final double RIGID_CLIMBERS_UP = 10;
+    public static final double RIGID_CLIMBERS_DOWN = 0;
+
+    public static final double ROTATING_CLIMBERS_FORWARD = 10;
+    public static final double ROTATING_CLIMBERS_BACKWARD = 0;
   }
 
   public static final class ModuleConstants {

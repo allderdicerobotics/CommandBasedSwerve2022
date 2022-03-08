@@ -1,21 +1,21 @@
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeShooter;
 
-public class RollersOut extends ParallelCommandGroup {
-	public RollersOut(
+public class ShootOut extends ParallelCommandGroup {
+	public ShootOut(
 			IntakeShooter intakeShooter,
 			Indexer indexer) {
 		addCommands(
 				new StartEndCommand(
-						intakeShooter::runOutSlow,
+						intakeShooter::shootOut,
 						intakeShooter::stop,
 						intakeShooter),
 				new StartEndCommand(
-						indexer::indexerOut,
+						indexer::indexerInSlow,
 						indexer::stop,
 						indexer));
 	}

@@ -1,10 +1,11 @@
 package frc.robot.commands.climber;
 
-// public class ClimbHigh extends SequentialCommandGroup {
-// public ClimbHigh(ClimberControl climber) {
-// addCommands(
-// new ClimbMid(control),
-// new ClimbStep(control),
-// );
-// }
-// }
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.RigidClimbers;
+import frc.robot.subsystems.RotatingClimbers;
+
+public class ClimbHigh extends SequentialCommandGroup {
+    public ClimbHigh(RigidClimbers rigidClimbers, RotatingClimbers rotatingClimbers) {
+        addCommands();
+    }
+}

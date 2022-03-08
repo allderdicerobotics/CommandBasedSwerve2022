@@ -16,26 +16,15 @@ public class RotatingClimbers extends SubsystemBase {
     private final MotorControllerGroup rotatingClimberGroup = new MotorControllerGroup(leftRotatingClimber,
             rightRotatingClimber);
 
-    public void setAngle(double anglePosition) {
+    public void setPosition(double anglePosition) {
         // TODO make this work
     }
 
     public void setSpeed(double desiredSpeed) {
         rotatingClimberGroup.set(desiredSpeed); // TODO: change to position
     }
+
+    public boolean atSetpoint() {
+        return true;
+    }
 }
-
-// public boolean closeToAngle(double anglePosition) {
-// return (
-// this.motorCloseToAngle(this.leftRotatingClimber)
-// &&
-// this.motorCloseToAngle(this.rightRotatingClimber)
-// );
-// }
-
-// public boolean motorCloseToAngle(double anglePosition, CANSparkMax m) {
-// double curr = m.getEncoder().getPosition();
-// double rawError = Math.abs(anglePosition - curr);
-// return rawError < ClimberConstants.ROTATING_CLOSE_ENOUGH;
-// }
-// }

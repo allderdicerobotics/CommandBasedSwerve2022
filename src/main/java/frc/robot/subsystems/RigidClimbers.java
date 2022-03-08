@@ -1,13 +1,20 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ClimberConstants;
 
 public class RigidClimbers extends SubsystemBase {
+
+        public double currentSetpoint;
+        public double leftMotorOffset = 0;
+        public double rightMotorOffset = 0;
+
         private final CANSparkMax leftRigidClimber = new CANSparkMax(Constants.ClimberConstants.leftRigidClimberPort,
                         MotorType.kBrushless);
         private final CANSparkMax rightRigidClimber = new CANSparkMax(Constants.ClimberConstants.rightRigidClimberPort,
@@ -16,36 +23,28 @@ public class RigidClimbers extends SubsystemBase {
         private final MotorControllerGroup rigidClimberGroup = new MotorControllerGroup(leftRigidClimber,
                         rightRigidClimber);
 
-        // private final double MIN_SETPOINT = null; // TODO
-        // private final double MAX_SETPOINT = null; // TODO
+        public boolean atSetpoint() {
+                double leftCurrentPosition = leftRigidClimber.getEncoder().getPosition();
+                double leftError = Math.abs(this.currentSetpoint - leftCurrentPosition);
+                double rightCurrentPosition = rightRigidClimber.getEncoder().getPosition();
+                double rightError = Math.abs(this.currentSetpoint - rightCurrentPosition);
+                return (leftError < ClimberConstants.rigidPIDTolerance
+                                && rightError < ClimberConstants.rigidPIDTolerance);
+        }
 
-        // public boolean closeToPosition(double position) {
-        // double setp = this.posToSetpoint(position);
-        // return (
-        // this.motorCloseToSetpoint(setp, this.leftRigidClimber)
-        // &&
-        // this.motorCloseToSetpoint(setp, this.rightRigidClimber)
-        // );
-        // }
+        public void setPosition(double desiredPosition) {
+                this.currentSetpoint = desiredPosition;
+                leftRigidClimber.getPIDController().setReference(desiredPosition - leftMotorOffset,
+                                ControlType.kPosition);
+                rightRigidClimber.getPIDController().setReference(desiredPosition - rightMotorOffset,
+                                ControlType.kPosition);
+        }
 
-        // public boolean motorCloseToSetpoint(double setp, CANSparkMax m) {
-        // double curr = m.getEncoder().getPosition();
-        // double rawError = Math.abs(setp - curr);
-        // return rawError < ClimberConstants.RIGID_CLOSE_ENOUGH;
-        // }
+        public double getLeftCurrent() {
+                return leftRigidClimber.getOutputCurrent();
+        }
 
-        // public void setHeight(double position) {
-        // double setp = this.posToSetpoint(position);
-        // TODO make this work with `setp`
+        public void setSpeed(double desiredSpeed) {
+                rigidClimberGroup.set(desiredSpeed);
+        }
 }
-
-// public double posToSetpoint(double position) {
-// return (new MapValues())
-// .from(0.0, 1.0)
-// .to(MIN_SETPOINT, MAX_SETPOINT)
-// .apply(position);
-// }
-
-// public void setSpeed(double desiredSpeed) {
-// m_rigidClimberGroup.set(desiredSpeed); // xTODO: change to position
-// }

@@ -1,4 +1,4 @@
-package frc.robot.commands.intaking;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -15,7 +15,7 @@ public class RollersIn extends ParallelCommandGroup {
 						intakeShooter::stop,
 						intakeShooter),
 				new StartEndCommand(
-						indexer::indexerIn,
+						indexer::indexerInFast,
 						indexer::stop,
 						indexer));
 	}

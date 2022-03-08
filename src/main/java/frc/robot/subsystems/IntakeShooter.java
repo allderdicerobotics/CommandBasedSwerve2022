@@ -26,8 +26,12 @@ public class IntakeShooter extends SubsystemBase {
     setSpeed(0.5); // TODO: find actual speed
   }
 
-  public void runOut() {
+  public void runOutSlow() {
     setSpeed(-0.5); // TODO: find actual speed
+  }
+
+  public void shootOut() {
+    setSpeed(-1.0); // TODO: find actual speed
   }
 
 }
