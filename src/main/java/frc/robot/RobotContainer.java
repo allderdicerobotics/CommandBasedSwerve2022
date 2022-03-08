@@ -12,8 +12,14 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands2.intaking.IntakeCmd;
+import frc.robot.commands2.intaking.IntakeDown;
+import frc.robot.commands2.intaking.IntakeUp;
+import frc.robot.commands2.intaking.RunIntake;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeActuation;
+import frc.robot.subsystems.IntakeShooter;
 import frc.robot.subsystems.RigidClimbers;
 import frc.robot.subsystems.RotatingClimbers;
 
@@ -29,8 +35,8 @@ public class RobotContainer {
   private final IntakeActuation intakeActuation = new IntakeActuation();
   private final RigidClimbers rigidClimbers = new RigidClimbers();
   private final RotatingClimbers rotatingClimbers = new RotatingClimbers();
-  // private final Indexer m_indexer = new Indexer();
-  // private final IntakerRod m_intakerRod = new IntakerRod();
+  private final Indexer indexer = new Indexer();
+  private final IntakeShooter intakeShooter = new IntakeShooter();
   // private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
 
   // The driver's controller
@@ -68,30 +74,27 @@ public class RobotContainer {
     // intakeActuation.setPositionUp();
     // intakeActuation.enable();
     // }, intakeActuation));
-    new JoystickButton(driverController, 1).whenHeld(
-        new RunCommand(() -> {
-          intakeActuation.setGoal(0);
+    new JoystickButton(driverController, 1).whileActiveOnce(new IntakeCmd(intakeActuation, intakeShooter, indexer));
+    // new JoystickButton(driverController, 1).whenHeld(new StartEndCommand(
+    // intakeShooter::runIn,
+    // intakeShooter::stop,
+    // intakeShooter));
 
-        }));
+    new JoystickButton(driverController, 2).whenHeld(new IntakeUp(intakeActuation));
 
-    new JoystickButton(driverController, 2).whenHeld(
-        new RunCommand(() -> {
-          intakeActuation.setGoal(0.7);
-        }));
+    // new JoystickButton(driverController, 3).whenHeld(
+    // new StartEndCommand(() -> {
+    // rigidClimbers.setSpeed(0.25);
+    // }, () -> {
+    // rigidClimbers.setSpeed(0);
+    // }, rigidClimbers));
 
-    new JoystickButton(driverController, 3).whenHeld(
-        new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(0.25);
-        }, () -> {
-          rigidClimbers.setSpeed(0);
-        }, rigidClimbers));
-
-    new JoystickButton(driverController, 4).whenHeld(
-        new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(-0.25);
-        }, () -> {
-          rigidClimbers.setSpeed(0);
-        }, rigidClimbers));
+    // new JoystickButton(driverController, 4).whenHeld(
+    // new StartEndCommand(() -> {
+    // rigidClimbers.setSpeed(-0.25);
+    // }, () -> {
+    // rigidClimbers.setSpeed(0);
+    // }, rigidClimbers));
 
     new JoystickButton(driverController, 5).whenHeld(
         new StartEndCommand(() -> {

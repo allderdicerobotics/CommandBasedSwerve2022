@@ -9,23 +9,17 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 public class RunIntake extends ParallelCommandGroup {
 	public RunIntake(
-		IntakeShooter intakeShooter,
-		Indexer indexer,
-		IntakeActuation intakeActuation
-	) {
-		addRequirements(intakeActuation); // phantom
+			IntakeShooter intakeShooter,
+			Indexer indexer) {
+		// addRequirements(intakeActuation); // phantom
 		addCommands(
-			new StartEndCommand(
-				intakeShooter::runIn,
-				intakeShooter::stop,
-				intakeShooter
-			),
-			new StartEndCommand(
-				indexer::indexerIn,
-				indexer::stop,
-				indexer
-			),
-		);
+				new StartEndCommand(
+						intakeShooter::runIn,
+						intakeShooter::stop,
+						intakeShooter),
+				new StartEndCommand(
+						indexer::indexerIn,
+						indexer::stop,
+						indexer));
 	}
 }
-

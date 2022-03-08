@@ -1,7 +1,7 @@
 package frc.robot.commands2.climber;
 
-import frc.robot.subsystems.RigidArms;
-import frc.robot.subsystems.RotatingArms;
+import frc.robot.subsystems.RigidClimbers;
+import frc.robot.subsystems.RotatingClimbers;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -14,7 +14,11 @@ public class ClimberPos {
 		this.rotatingAngle = rotatingAngle;
 	}
 
-	public double getRigidHeight()		{ return this.rigidHeight; }
-	public double getRotatingAngle()	{ return this.rotatingAngle; }
-}
+	public double getRigidHeight() {
+		return this.rigidHeight;
+	}
 
+	public double getRotatingAngle() {
+		return this.rotatingAngle;
+	}
+}

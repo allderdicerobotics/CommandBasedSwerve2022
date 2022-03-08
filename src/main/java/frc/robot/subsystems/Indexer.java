@@ -19,14 +19,14 @@ public class Indexer extends SubsystemBase {
   }
 
   public void stop() {
-    indexerMotor.stop();
+    indexerMotor.set(0);
   }
 
   public void indexerIn() {
-    spinIndexer(5.0); // check speed
+    spinIndexer(-0.5); // check speed
   }
 
   public void indexerOut() {
-    spinIndexer(5.0); // check speed
+    spinIndexer(0.5); // check speed
   }
 }

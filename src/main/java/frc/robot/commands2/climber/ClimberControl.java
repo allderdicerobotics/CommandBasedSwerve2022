@@ -1,37 +1,40 @@
 package frc.robot.commands2.climber;
 
-import frc.robot.subsystems.RigidArms;
-import frc.robot.subsystems.RotatingArms;
+import frc.robot.subsystems.RigidClimbers;
+import frc.robot.subsystems.RotatingClimbers;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import java.util.Function;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ClimberControl {
-	private RigidArms rigidArms;
-	private RotatingArms rotatingArms;
+	private RigidClimbers rigidArms;
+	private RotatingClimbers rotatingArms;
 
-	public ClimberControl(RigidArms rigidArms, RotatingArms rotatingArms) {
+	public ClimberControl(RigidClimbers rigidArms, RotatingClimbers rotatingArms) {
 		this.rigidArms = rigidArms;
 		this.rotatingArms = rotatingArms;
 	}
 
-	public CommandBase to(ClimberPos position) {
-		return (new InstantCommand(
-			() -> {
-				this.rigidArms.setHeight(position.getRigidHeight());
-				this.rotatingArms.setPosition(position.getRotatingAngle());
-	
-			}
-		)).until(() -> (
-			this.rigidArms.closeToHeight(position.getRigidHeight())
-			&&
-			this.rotatingArms.closeToAngle(position.getRotatingAngle())
-		)); // if PID is garbage, we'll need some transformation
-		    // to check this once and then later to make sure its still all okay
+	// public CommandBase to(ClimberPos position) {
+	// return (new InstantCommand(
+	// () -> {
+	// this.rigidArms.setHeight(position.getRigidHeight());
+	// this.rotatingArms.closeToAngle(position.getRotatingAngle());
+
+	// }
+	// )).until(() -> (
+	// this.rigidArms.closeToHeight(position.getRigidHeight())
+	// &&
+	// this.rotatingArms.closeToAngle(position.getRotatingAngle())
+	// )); // if PID is garbage, we'll need some transformation
+	// // to check this once and then later to make sure its still all okay
+	// }
+
+	public RigidClimbers getRigidArms() {
+		return this.rigidArms;
 	}
 
-	public RigidArms getRigidArms()		{ return this.rigidArms; }
-	public RotatingArms getRotatingArms() 	{ return this.rotatingArms; }
+	public RotatingClimbers getRotatingArms() {
+		return this.rotatingArms;
+	}
 }
-

@@ -36,7 +36,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
       DriveConstants.kFrontLeftTurningMotorPort, new ThriftyEncoder(new AnalogInput(0), Rotation2d.fromDegrees(30)));
 
-  private final SwerveModule rearLeft = new SwerveModule(DriveConstants.kRearLeftDriveMotorPort, DriveConstants.kRearLeftTurningMotorPort,
+  private final SwerveModule rearLeft = new SwerveModule(DriveConstants.kRearLeftDriveMotorPort,
+      DriveConstants.kRearLeftTurningMotorPort,
       new ThriftyEncoder(new AnalogInput(1), Rotation2d.fromDegrees(30)));
 
   private final SwerveModule frontRight = new SwerveModule(DriveConstants.kFrontRightDriveMotorPort,
@@ -49,7 +50,8 @@ public class DriveSubsystem extends SubsystemBase {
   // TODO: FIX NAVX CONFIGURATION NOW THAT IT'S VERTICAL
   private final AHRS navX = new AHRS(SerialPort.Port.kUSB);
   // Odometry class for tracking robot pose
-  private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation,
+  private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation,
+      backLeftLocation,
       backRightLocation);
 
   private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, navX.getRotation2d());
@@ -65,7 +67,8 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    odometry.update(navX.getRotation2d(), frontLeft.getState(), frontRight.getState(), rearLeft.getState(), rearRight.getState());
+    odometry.update(navX.getRotation2d(), frontLeft.getState(), frontRight.getState(), rearLeft.getState(),
+        rearRight.getState());
   }
 
   /**
@@ -99,20 +102,21 @@ public class DriveSubsystem extends SubsystemBase {
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates = kinematics
-        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, navX.getRotation2d())
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+        .toSwerveModuleStates(
+            fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, navX.getRotation2d())
+                : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     rearLeft.setDesiredState(swerveModuleStates[2]);
     rearRight.setDesiredState(swerveModuleStates[3]);
 
-    // SmartDashboard.putNumber("Front Left Speed",
-    // frontLeft.getState().speedMetersPerSecond);
-    // SmartDashboard.putNumber("Front Left Angle",
-    // frontLeft.getState().angle.getRadians());
-    // SmartDashboard.putNumber("Front Left Desired Angle",
-    // swerveModuleStates[0].angle.getRadians());
+    SmartDashboard.putNumber("Front Left Speed",
+        frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Front Left Angle",
+        frontLeft.getState().angle.getRadians());
+    SmartDashboard.putNumber("Front Left Desired Angle",
+        swerveModuleStates[0].angle.getRadians());
   }
 
   public void driveWithJoystick(double leftX, double leftY, double rightX, boolean fieldRelative) {

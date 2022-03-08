@@ -62,10 +62,13 @@ public final class Constants {
     public static final int rightActuationPort = 2;
     public static final int leftActuationPort = 3;
     public static final int indexerMotorPort = 4;
-    public static final int intakerRodMotorPort = 5;
+    public static final int intakerShooterMotorPort = 5;
 
     public static final double kMaxAngularVelocity = 2;
     public static final double kMaxAngularAcceleration = 2;
+
+    public static final double downPosition = 0;
+    public static final double upPosition = 1.2;
   }
 
   public static final class ClimberConstants {

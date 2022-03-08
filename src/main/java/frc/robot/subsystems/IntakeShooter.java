@@ -11,22 +11,23 @@ import com.revrobotics.CANSparkMax;
 
 public class IntakeShooter extends SubsystemBase {
 
-  private final CANSparkMax intakeShooterMotor = new CANSparkMax(Constants.IntakeConstants.indexerMotorPort, MotorType.kBrushless);
+  private final CANSparkMax intakeShooterMotor = new CANSparkMax(Constants.IntakeConstants.intakerShooterMotorPort,
+      MotorType.kBrushless);
 
   public void setSpeed(double speed) {
     intakeShooterMotor.set(speed);
   }
 
   public void stop() {
-    intakeShooterMotor.stop();
+    setSpeed(0);
   }
 
   public void runIn() {
-    setSpeed(5.0); // TODO: find actual speed
+    setSpeed(0.5); // TODO: find actual speed
   }
 
   public void runOut() {
-    setSpeed(-5.0); // TODO: find actual speed
+    setSpeed(-0.5); // TODO: find actual speed
   }
 
 }
