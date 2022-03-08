@@ -27,6 +27,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
 
+  // set up swerve modules
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
       DriveConstants.kFrontLeftTurningMotorPort, new ThriftyEncoder(new AnalogInput(0), Rotation2d.fromDegrees(30)));
 
@@ -87,6 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    */
 
+  // Field oriented control
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates = DriveConstants.kinematics
@@ -107,6 +109,7 @@ public class DriveSubsystem extends SubsystemBase {
     // swerveModuleStates[0].angle.getRadians());
   }
 
+  // drive accorsing to joystick
   public void driveWithJoystick(double leftX, double leftY, double rightX, boolean fieldRelative) {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.

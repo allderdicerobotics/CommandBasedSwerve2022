@@ -30,8 +30,10 @@ public class SwerveModule {
   private final SparkMaxPIDController drivePIDController;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(1.1, 0, 0, new TrapezoidProfile.Constraints(
-      Constants.ModuleConstants.kModuleMaxAngularVelocity, Constants.ModuleConstants.kModuleMaxAngularAcceleration));
+  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(1.1, 0, 0,
+      new TrapezoidProfile.Constraints(
+          Constants.ModuleConstants.kModuleMaxAngularVelocity,
+          Constants.ModuleConstants.kModuleMaxAngularAcceleration));
 
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.33217, 2.5407, 0.52052);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.25, 0.2);
@@ -47,8 +49,6 @@ public class SwerveModule {
    */
 
   public SwerveModule(int driveMotorID, int turningMotorID, ThriftyEncoder thriftyEncoder) {
-    // int[] driveEncoderPorts,
-    // int[] turningEncoderPorts) {
     driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     turningMotor = new CANSparkMax(turningMotorID, MotorType.kBrushless);
 
@@ -56,8 +56,7 @@ public class SwerveModule {
     driveEncoder = driveMotor.getEncoder();
     turningEncoder = thriftyEncoder;
 
-    // Limit the PID Controller's input range between -pi and pi and set the
-    // input
+    // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -88,7 +87,8 @@ public class SwerveModule {
     final double driveFeedforwardOut = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = turningPIDController.calculate(turningEncoder.getPositionRadians(), state.angle.getRadians());
+    final double turnOutput = turningPIDController.calculate(turningEncoder.getPositionRadians(),
+        state.angle.getRadians());
     SmartDashboard.putNumber("turn voltage out" + this.turningMotor.getDeviceId(), turnOutput);
 
     final double turnFeedforwardOut = m_turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);

@@ -11,12 +11,11 @@ public class ClimbMid extends SequentialCommandGroup {
                                 new ClimbersToPosition(
                                                 rigidClimbers,
                                                 rotatingClimbers,
-                                                ClimberConstants.RIGID_CLIMBERS_UP,
-                                                ClimberConstants.ROTATING_CLIMBERS_FORWARD),
-                                new ClimbersToPosition(
-                                                rigidClimbers,
-                                                rotatingClimbers,
-                                                ClimberConstants.RIGID_CLIMBERS_DOWN,
-                                                ClimberConstants.ROTATING_CLIMBERS_BACKWARD));
+                                                ClimberConstants.RIGID_CLIMBERS_MAX,
+                                                ClimberConstants.ROTATING_CLIMBERS_B_SM));
+                // lift rigid arms, turn rotating ones away from mid bar
+                // new DriveToPosition( TODO: DRIVE FORWARDS);
+                // drives robot to mid bar
+
         }
 }

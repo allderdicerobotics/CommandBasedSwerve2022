@@ -34,7 +34,7 @@ public final class Constants {
     public static final int kRearRightTurningMotorPort = 17;
     public static final boolean kGyroReversed = false;
 
-    public static final Translation2d frontLeftLocation = new Translation2d(-0.381, 0.381);
+    public static final Translation2d frontLeftLocation = new Translation2d(-0.381, 0.381); // TODO
     public static final Translation2d frontRightLocation = new Translation2d(0.381, 0.381);
     public static final Translation2d backLeftLocation = new Translation2d(-0.381, -0.381);
     public static final Translation2d backRightLocation = new Translation2d(0.381, -0.381);
@@ -83,11 +83,17 @@ public final class Constants {
     public static final double maxRigidSetpoint = 10;
     public static final double minRigidSetpoint = 0;
 
-    public static final double RIGID_CLIMBERS_UP = 10;
-    public static final double RIGID_CLIMBERS_DOWN = 0;
+    public static final double RIGID_CLIMBERS_MAX = 10; // TODO: get these
+    public static final double RIGID_CLIMBERS_MIN = 0;
+    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR = 3.14;
+    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR = 8;
+    public static final double RIGID_CLIMBERS_HALF = RIGID_CLIMBERS_MAX / 2;
 
-    public static final double ROTATING_CLIMBERS_FORWARD = 10;
-    public static final double ROTATING_CLIMBERS_BACKWARD = 0;
+    public static final double ROTATING_CLIMBERS_F_SM = 10;
+    public static final double ROTATING_CLIMBERS_B_SM = 0;
+    public static final double ROTATING_CLIMBERS_F_L = 9;
+    public static final double ROTATING_CLIMBERS_B_ROTATING_ON_BAR = 7;
+    public static final double ROTATING_CLIMBERS_B_ROTATING_OFF_BAR = 3;
   }
 
   public static final class ModuleConstants {

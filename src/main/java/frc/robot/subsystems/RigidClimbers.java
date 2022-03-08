@@ -23,6 +23,8 @@ public class RigidClimbers extends SubsystemBase {
         private final MotorControllerGroup rigidClimberGroup = new MotorControllerGroup(leftRigidClimber,
                         rightRigidClimber);
 
+        // get motors, make group
+
         public boolean atSetpoint() {
                 double leftCurrentPosition = leftRigidClimber.getEncoder().getPosition();
                 double leftError = Math.abs(this.currentSetpoint - leftCurrentPosition);
@@ -31,6 +33,7 @@ public class RigidClimbers extends SubsystemBase {
                 return (leftError < ClimberConstants.rigidPIDTolerance
                                 && rightError < ClimberConstants.rigidPIDTolerance);
         }
+        // PID
 
         public void setPosition(double desiredPosition) {
                 this.currentSetpoint = desiredPosition;
@@ -39,12 +42,15 @@ public class RigidClimbers extends SubsystemBase {
                 rightRigidClimber.getPIDController().setReference(desiredPosition - rightMotorOffset,
                                 ControlType.kPosition);
         }
+        // setting position
 
         public double getLeftCurrent() {
                 return leftRigidClimber.getOutputCurrent();
         }
+        // get left current
 
         public void setSpeed(double desiredSpeed) {
                 rigidClimberGroup.set(desiredSpeed);
         }
+        // set speed
 }

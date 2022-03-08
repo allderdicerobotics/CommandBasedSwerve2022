@@ -9,6 +9,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 
+// get can id of indexer spark max, set the speed of the motor, define methods
 public class IntakeShooter extends SubsystemBase {
 
   private final CANSparkMax intakeShooterMotor = new CANSparkMax(Constants.IntakeConstants.intakerShooterMotorPort,

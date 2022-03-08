@@ -36,12 +36,14 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     SmartDashboard.putNumber("Intake Actuation PID Output", output);
     SmartDashboard.putNumber("Intake Actuation FF Output", feedforward);
   }
+  // PID values, set up motors
 
   @Override
   public double getMeasurement() {
     SmartDashboard.putNumber("Intake Actuation Position", actuationEncoder.getPosition());
     return actuationEncoder.getPosition();
   }
+  // get position of intake motor
 
   public IntakeActuation() {
     super(new ProfiledPIDController(ActuationConstants.kp, ActuationConstants.ki, ActuationConstants.kd,
@@ -59,18 +61,22 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     followingActuationMotor.follow(leadingActuationMotor, true);
     enable();
   }
+  // more PID, follow can id 2
 
   public void setPosition(double desiredPosition) {
     setGoal(desiredPosition);
   }
+  // set position
 
   public void setPositionUp() {
     setPosition(ActuationConstants.upPosition);
     System.out.println("intake up");
   }
+  // raise intake
 
   public void setPositionDown() {
     setPosition(ActuationConstants.downPosition);
     System.out.println("intake down");
   }
+  // lower intake
 }
