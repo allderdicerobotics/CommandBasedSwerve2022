@@ -10,24 +10,18 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.ThriftyEncoder;
 
 public class DriveSubsystem extends SubsystemBase {
   // Robot swerve modules
-
-  private final Translation2d frontLeftLocation = new Translation2d(-0.381, 0.381);
-  private final Translation2d frontRightLocation = new Translation2d(0.381, 0.381);
-  private final Translation2d backLeftLocation = new Translation2d(-0.381, -0.381);
-  private final Translation2d backRightLocation = new Translation2d(0.381, -0.381);
 
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
@@ -36,7 +30,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
       DriveConstants.kFrontLeftTurningMotorPort, new ThriftyEncoder(new AnalogInput(0), Rotation2d.fromDegrees(30)));
 
-  private final SwerveModule rearLeft = new SwerveModule(DriveConstants.kRearLeftDriveMotorPort, DriveConstants.kRearLeftTurningMotorPort,
+  private final SwerveModule rearLeft = new SwerveModule(DriveConstants.kRearLeftDriveMotorPort,
+      DriveConstants.kRearLeftTurningMotorPort,
       new ThriftyEncoder(new AnalogInput(1), Rotation2d.fromDegrees(30)));
 
   private final SwerveModule frontRight = new SwerveModule(DriveConstants.kFrontRightDriveMotorPort,
@@ -45,18 +40,13 @@ public class DriveSubsystem extends SubsystemBase {
   private final SwerveModule rearRight = new SwerveModule(DriveConstants.kRearRightDriveMotorPort,
       DriveConstants.kRearRightTurningMotorPort, new ThriftyEncoder(new AnalogInput(3), Rotation2d.fromDegrees(30)));
 
-  // The gyro sensor
+  // The NavX
   // TODO: FIX NAVX CONFIGURATION NOW THAT IT'S VERTICAL
   private final AHRS navX = new AHRS(SerialPort.Port.kUSB);
+
   // Odometry class for tracking robot pose
-  private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation,
-      backRightLocation);
-
-  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, navX.getRotation2d());
-
-  // SwerveDriveOdometry m_odometry =
-  // new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
-  // m_gyro.getRotation2d());
+  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(DriveConstants.kinematics,
+      navX.getRotation2d());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -65,7 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    odometry.update(navX.getRotation2d(), frontLeft.getState(), frontRight.getState(), rearLeft.getState(), rearRight.getState());
+    odometry.update(navX.getRotation2d(), frontLeft.getState(), frontRight.getState(), rearLeft.getState(),
+        rearRight.getState());
   }
 
   /**
@@ -98,9 +89,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    var swerveModuleStates = kinematics
-        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, navX.getRotation2d())
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    var swerveModuleStates = DriveConstants.kinematics
+        .toSwerveModuleStates(
+            fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, navX.getRotation2d())
+                : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
@@ -121,20 +113,23 @@ public class DriveSubsystem extends SubsystemBase {
     final var xSpeed = xspeedLimiter.calculate(MathUtil.applyDeadband(leftX, 0.05)) * DriveConstants.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
-    // we want a positive value when we pull to the left. Xbox controllers
-    // return positive values when you pull to the right by default.
+    // we want a positive value when we pull to the left.
     final var ySpeed = -yspeedLimiter.calculate(MathUtil.applyDeadband(leftY, 0.05)) * DriveConstants.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
-    // mathematics). Xbox controllers return positive values when you pull to
-    // the right by default.
+    // mathematics).
     final var rot = -rotLimiter.calculate(MathUtil.applyDeadband(rightX, 0.05)) * DriveConstants.kMaxAngularSpeed;
 
-    SmartDashboard.putNumber("Joystick X Speed", leftX);
-    SmartDashboard.putNumber("Joystick Y Speed", leftY);
-    SmartDashboard.putNumber("Joystick Rotation", rightX);
+    // SmartDashboard.putNumber("Joystick X Speed", leftX);
+    // SmartDashboard.putNumber("Joystick Y Speed", leftY);
+    // SmartDashboard.putNumber("Joystick Rotation", rightX);
+
     this.drive(xSpeed, ySpeed, rot, fieldRelative);
+  }
+
+  public void setModuleStates(SwerveModuleState[] states) {
+    // TODO
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
