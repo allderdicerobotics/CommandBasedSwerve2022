@@ -1,9 +1,4 @@
-package frc.robot.commands2.climber;
-
-import frc.robot.subsystems.RigidClimbers;
-import frc.robot.subsystems.RotatingClimbers;
-
-import edu.wpi.first.math.geometry.Rotation2d;
+package frc.robot.commands.climber;
 
 public class ClimberPos {
 	private final double rigidHeight;

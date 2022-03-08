@@ -14,7 +14,7 @@ public class Indexer extends SubsystemBase {
   private final CANSparkMax indexerMotor = new CANSparkMax(Constants.IntakeConstants.indexerMotorPort,
       MotorType.kBrushless);
 
-  public void spinIndexer(double speed) {
+  public void setSpeed(double speed) {
     indexerMotor.set(speed);
   }
 
@@ -23,10 +23,10 @@ public class Indexer extends SubsystemBase {
   }
 
   public void indexerIn() {
-    spinIndexer(-0.5); // check speed
+    setSpeed(-0.5); // check speed
   }
 
   public void indexerOut() {
-    spinIndexer(0.5); // check speed
+    setSpeed(0.5); // check speed
   }
 }

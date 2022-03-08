@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 /**
@@ -18,7 +20,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
  */
 public final class Constants {
   public static final class DriveConstants {
-    public static final double kMaxSpeed = 3.0; // 3 meters per second
+    public static final double kMaxSpeed = 3.0; // meters per second
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
     public static final int kFrontLeftDriveMotorPort = 10;
@@ -32,37 +34,35 @@ public final class Constants {
     public static final int kRearRightTurningMotorPort = 17;
     public static final boolean kGyroReversed = false;
 
-    // public static final double kTrackWidth = 0.5;
-    // Distance between centers of right and left wheels on robot
-    // public static final double kWheelBase = 0.7;
-    // Distance between front and back wheels on robot
-    // public static final SwerveDriveKinematics kDriveKinematics =
-    // new SwerveDriveKinematics(
-    // new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-    // new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-    // new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-    // new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+    public static final Translation2d frontLeftLocation = new Translation2d(-0.381, 0.381);
+    public static final Translation2d frontRightLocation = new Translation2d(0.381, 0.381);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.381, -0.381);
+    public static final Translation2d backRightLocation = new Translation2d(0.381, -0.381);
 
-    // public static final boolean kGyroReversed = false;
-
-    // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-    // These characterization values MUST be determined either experimentally or
-    // theoretically
-    // for *your* robot's drive.
-    // The SysId tool provides a convenient method for obtaining these values for
-    // your robot.
-    // public static final double ksVolts = 1;
-    // public static final double kvVoltSecondsPerMeter = 0.8;
-    // public static final double kaVoltSecondsSquaredPerMeter = 0.15;
-
-    // public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+        frontLeftLocation,
+        frontRightLocation,
+        backLeftLocation,
+        backRightLocation);
   }
 
   public static final class IntakeConstants {
-    public static final int rightActuationPort = 2;
-    public static final int leftActuationPort = 3;
+
     public static final int indexerMotorPort = 4;
     public static final int intakerShooterMotorPort = 5;
+
+  }
+
+  public static final class ActuationConstants {
+    public static final int rightMotorPort = 2;
+    public static final int leftMotorPort = 3;
+
+    public static final double ks = 0.0;
+    public static final double kcos = 0.5;
+    public static final double kv = 1.75;
+    public static final double kp = 0.75;
+    public static final double ki = 0.0;
+    public static final double kd = 0.0;
 
     public static final double kMaxAngularVelocity = 2;
     public static final double kMaxAngularAcceleration = 2;
@@ -85,28 +85,11 @@ public final class Constants {
 
     public static final double kModuleMaxAngularVelocity = 4 * 2 * Math.PI;
     public static final double kModuleMaxAngularAcceleration = 4 * 2 * Math.PI; // radians per second squared
-    // public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 *
-    // Math.PI;
-    // public static final double
-    // kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
-
-    // public static final int kEncoderCPR = 1024;
-    // public static final double kWheelDiameterMeters = 0.15;
-    // public static final double kDriveEncoderDistancePerPulse =
-    // // Assumes the encoders are directly mounted on the wheel shafts
-    // (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
-
-    // public static final double kTurningEncoderDistancePerPulse =
-    // // Assumes the encoders are on a 1:1 reduction with the module shaft.
-    // (2 * Math.PI) / (double) kEncoderCPR;
-
-    // public static final double kPModuleTurningController = 1;
-
-    // public static final double kPModuleDriveController = 1;
   }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
   }
 
   public static final class AutoConstants {

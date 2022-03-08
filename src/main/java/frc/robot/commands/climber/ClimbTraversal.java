@@ -1,4 +1,4 @@
-package frc.robot.commands2.climber;
+package frc.robot.commands.climber;
 
 // public class ClimbTraversal extends SequentialCommandGroup {
 // public ClimbTraversal(ClimberControl climber) {

@@ -1,7 +1,4 @@
-package frc.robot.commands2.climber;
-
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ClimberConstants;
+package frc.robot.commands.climber;
 
 // public class ClimbStep extends SequentialCommandGroup {
 // public ClimbStep(ClimberControl climber) {

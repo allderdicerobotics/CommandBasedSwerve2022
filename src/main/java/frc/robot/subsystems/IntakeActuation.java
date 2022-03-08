@@ -9,24 +9,25 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.Constants;
+import frc.robot.Constants.ActuationConstants;
 
 public class IntakeActuation extends ProfiledPIDSubsystem {
 
-  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(0.0, 0.5, 1.75);
+  private final ArmFeedforward actuationFeedforward = new ArmFeedforward(ActuationConstants.ks, ActuationConstants.kcos,
+      ActuationConstants.kv);
 
-  private final CANSparkMax leadingActuationMotor = new CANSparkMax(Constants.IntakeConstants.rightActuationPort,
+  private final CANSparkMax leadingActuationMotor = new CANSparkMax(ActuationConstants.rightMotorPort,
       MotorType.kBrushless);
 
-  private final CANSparkMax followingActuationMotor = new CANSparkMax(Constants.IntakeConstants.leftActuationPort,
+  private final CANSparkMax followingActuationMotor = new CANSparkMax(ActuationConstants.leftMotorPort,
       MotorType.kBrushless);
 
   private RelativeEncoder actuationEncoder;
 
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
-    // Calculate the feedforward from the sepoint
 
+    // Calculate the feedforward from the sepoint
     double feedforward = actuationFeedforward.calculate(setpoint.position, setpoint.velocity);
 
     // Add the feedforward to the PID output to get the motor output
@@ -39,37 +40,37 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
   @Override
   public double getMeasurement() {
     SmartDashboard.putNumber("Intake Actuation Position", actuationEncoder.getPosition());
-    // SmartDashboard.putNumber("Intake Actuation Setpoint", );
     return actuationEncoder.getPosition();
   }
 
   public IntakeActuation() {
-    super(new ProfiledPIDController(0.75, 0.0, 0.0,
-        new TrapezoidProfile.Constraints(Constants.IntakeConstants.kMaxAngularVelocity,
-            Constants.IntakeConstants.kMaxAngularAcceleration)));
+    super(new ProfiledPIDController(ActuationConstants.kp, ActuationConstants.ki, ActuationConstants.kd,
+        new TrapezoidProfile.Constraints(ActuationConstants.kMaxAngularVelocity,
+            ActuationConstants.kMaxAngularAcceleration)));
 
     final ProfiledPIDController pidController = getController();
     pidController.setTolerance(0.025);
     pidController.setIntegratorRange(-2.0, 2.0);
-    // System.out.println(pidController.);
     leadingActuationMotor.setInverted(false);
     actuationEncoder = leadingActuationMotor.getEncoder();
     actuationEncoder.setPositionConversionFactor(2 * Math.PI / 20);
     actuationEncoder.setVelocityConversionFactor(2 * Math.PI / 20);
     // actuationEncoder.setInverted(true);
     followingActuationMotor.follow(leadingActuationMotor, true);
-
-    // setGoal(0);
     enable();
   }
 
+  public void setPosition(double desiredPosition) {
+    setGoal(desiredPosition);
+  }
+
   public void setPositionUp() {
-    setGoal(1.2);
+    setPosition(ActuationConstants.upPosition);
     System.out.println("intake up");
   }
 
   public void setPositionDown() {
-    setGoal(0);
+    setPosition(ActuationConstants.downPosition);
     System.out.println("intake down");
   }
 }

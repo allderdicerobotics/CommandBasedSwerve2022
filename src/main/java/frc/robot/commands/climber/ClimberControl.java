@@ -1,10 +1,7 @@
-package frc.robot.commands2.climber;
+package frc.robot.commands.climber;
 
 import frc.robot.subsystems.RigidClimbers;
 import frc.robot.subsystems.RotatingClimbers;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ClimberControl {
 	private RigidClimbers rigidArms;

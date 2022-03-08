@@ -1,6 +1,4 @@
-package frc.robot.commands2.climber;
-
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+package frc.robot.commands.climber;
 
 // public class ClimbHigh extends SequentialCommandGroup {
 // public ClimbHigh(ClimberControl climber) {

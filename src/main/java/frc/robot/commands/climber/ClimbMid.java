@@ -1,9 +1,4 @@
-package frc.robot.commands2.climber;
-
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ClimberConstants;
-// import frc.robot.commands2.helpers.DriveHelpers;
-import frc.robot.subsystems.DriveSubsystem;
+package frc.robot.commands.climber;
 
 // public class ClimbMid extends SequentialCommandGroup {
 // public ClimbMid(ClimberControl climber, DriveSubsystem drive) {
