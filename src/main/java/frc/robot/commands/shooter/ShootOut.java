@@ -15,7 +15,7 @@ public class ShootOut extends ParallelCommandGroup {
 						intakeShooter::stop,
 						intakeShooter),
 				new StartEndCommand(
-						indexer::indexerInSlow,
+						indexer::indexerOut,
 						indexer::stop,
 						indexer));
 	}

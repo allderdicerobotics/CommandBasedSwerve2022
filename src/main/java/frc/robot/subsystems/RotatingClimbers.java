@@ -29,7 +29,6 @@ public class RotatingClimbers extends SubsystemBase {
                 rightRotatingClimber.getPIDController().setReference(desiredPosition - rightMotorOffset,
                                 ControlType.kPosition);
         }
-        // PID
 
         public void setSpeed(double desiredSpeed) {
                 rotatingClimberGroup.set(desiredSpeed);
