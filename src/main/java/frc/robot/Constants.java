@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -101,6 +103,13 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
+  }
+
+  public static final class VisionConstants {
+    public static final double CAMERA_HEIGHT_METERS = 1;
+    public static final double TARGET_HEIGHT_METERS = 2;
+    public static final double CAMERA_PITCH_RADIANS = 0;
+    public static final double GOAL_RANGE_METERS = 1;
   }
 
   public static final class AutoConstants {

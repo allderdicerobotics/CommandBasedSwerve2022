@@ -21,8 +21,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.ThriftyEncoder;
 
 public class DriveSubsystem extends SubsystemBase {
-  // Robot swerve modules
-
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
@@ -108,7 +106,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveWithJoystick(double leftX, double leftY, double rightX, boolean fieldRelative) {
-    // Get the x speed. We are inverting this because Xbox controllers return
+    // Get the x speed. We are inverting this because Playstation controllers return
     // negative values when we push forward.
     final var xSpeed = xspeedLimiter.calculate(MathUtil.applyDeadband(leftX, 0.05)) * DriveConstants.kMaxSpeed;
 
