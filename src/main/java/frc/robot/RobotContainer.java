@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -168,59 +172,49 @@ public class RobotContainer {
     // new InstantCommand(m_intakerRod.SpinIntakerIn())
     // );
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
 
-  //   // follow trajectory with PID
-  //   public Command getAutonomousCommand() {
-  //     // Create config for trajectory
-  //     TrajectoryConfig config = new TrajectoryConfig(
-  //       AutoConstants.kMaxSpeedMetersPerSecond,
-  //       AutoConstants.kMaxAccelerationMetersPerSecondSquared
-  //     )
-  //     // Add kinematics to ensure max speed is actually obeyed
-  //       .setKinematics(DriveConstants.kinematics);
+  public Command getAutonomousCommand() {
+    // This will load the file "Example Path.path" and generate it with a max velocity of 8 m/s and a max acceleration of 5 m/s^2
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("Example Path", 8, 5);
 
-  //     // An example trajectory to follow. All units in meters.
-  //     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-  //       // Start at the origin facing the +X direction
-  //       new Pose2d(0, 0, new Rotation2d(0)),
-  //       // Pass through these two interior waypoints, making an 's' curve path
-  //       List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-  //       // End 3 meters straight ahead of where we started, facing forward
-  //       new Pose2d(3, 0, new Rotation2d(0)),
-  //       config
-  //     );
+    var thetaController = new ProfiledPIDController(
+      AutoConstants.kPThetaController,
+      0,
+      0,
+      AutoConstants.kThetaControllerConstraints
+    );
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-  //     var thetaController = new ProfiledPIDController(
-  //       AutoConstants.kPThetaController,
-  //       0,
-  //       0,
-  //       AutoConstants.kThetaControllerConstraints
-  //     );
-  //     thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    var xController = new PIDController(AutoConstants.kPXController, 0, 0);
+    var yController = new PIDController(AutoConstants.kPYController, 0, 0);
 
-  //     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-  //       trajectory,
-  //       robotDrive::getPose, // Functional interface to feed supplier
-  //       DriveConstants.kinematics,
-  //       // Position controllers
-  //       new PIDController(AutoConstants.kPXController, 0, 0),
-  //       new PIDController(AutoConstants.kPYController, 0, 0),
-  //       thetaController,
-  //       robotDrive::setModuleStates,
-  //       robotDrive
-  //     );
+    // Create a PPSwerveControllerCommand. This is almost identical to WPILib's SwerveControllerCommand, but it uses the holonomic rotation
+    // from the PathPlannerTrajectory to control the robot's rotation.
+    // See the WPILib SwerveControllerCommand for more info on what you need to pass to the command
+    PPSwerveControllerCommand command1 = new PPSwerveControllerCommand(
+      path1,
+      robotDrive::getPose,
+      DriveConstants.kinematics,
+      xController,
+      yController,
+      thetaController,
+      robotDrive::setModuleStates,
+      robotDrive
+    );
 
-  //     // Reset odometry to the starting pose of the trajectory.
-  //     robotDrive.resetOdometry(trajectory.getInitialPose());
+    // Reset odometry to the starting pose of the trajectory.
+    robotDrive.resetOdometry(trajectory.getInitialPose());
 
-  //     // Run path following command, then stop at the end.
-  //     return swerveControllerCommand.andThen(
-  //       () -> robotDrive.drive(0, 0, 0, false)
-  //     );
-  //   }
+    // Run path following command, then stop at the end.
+    return new SequentialCommandGroup(
+      command1,
+      new InstantCommand(() -> robotDrive.drive(0, 0, 0, false), robotDrive)
+    );
+  }
 }
