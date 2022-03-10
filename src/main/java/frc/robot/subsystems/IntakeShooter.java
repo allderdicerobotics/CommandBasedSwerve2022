@@ -4,16 +4,18 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.Constants;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 // get can id of indexer spark max, set the speed of the motor, define methods
 public class IntakeShooter extends SubsystemBase {
 
-  private final CANSparkMax intakeShooterMotor = new CANSparkMax(Constants.IntakeConstants.intakerShooterMotorPort,
-      MotorType.kBrushless);
+  private final CANSparkMax intakeShooterMotor = new CANSparkMax(
+    Constants.IntakeConstants.intakerShooterMotorPort,
+    MotorType.kBrushless
+  );
 
   public void setSpeed(double speed) {
     intakeShooterMotor.set(speed);
@@ -34,5 +36,4 @@ public class IntakeShooter extends SubsystemBase {
   public void shootOut() {
     setSpeed(-1.0); // TODO: find actual speed
   }
-
 }

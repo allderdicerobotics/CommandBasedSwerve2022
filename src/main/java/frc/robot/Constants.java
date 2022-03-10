@@ -18,7 +18,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
   public static final class DriveConstants {
+
     public static final double kMaxSpeed = 3.0; // meters per second
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
@@ -33,26 +35,39 @@ public final class Constants {
     public static final int kRearRightTurningMotorPort = 17;
     public static final boolean kGyroReversed = false;
 
-    public static final Translation2d frontLeftLocation = new Translation2d(-0.381, 0.381); // TODO
-    public static final Translation2d frontRightLocation = new Translation2d(0.381, 0.381);
-    public static final Translation2d backLeftLocation = new Translation2d(-0.381, -0.381);
-    public static final Translation2d backRightLocation = new Translation2d(0.381, -0.381);
+    public static final Translation2d frontLeftLocation = new Translation2d(
+      -0.381,
+      0.381
+    ); // TODO
+    public static final Translation2d frontRightLocation = new Translation2d(
+      0.381,
+      0.381
+    );
+    public static final Translation2d backLeftLocation = new Translation2d(
+      -0.381,
+      -0.381
+    );
+    public static final Translation2d backRightLocation = new Translation2d(
+      0.381,
+      -0.381
+    );
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-        frontLeftLocation,
-        frontRightLocation,
-        backLeftLocation,
-        backRightLocation);
+      frontLeftLocation,
+      frontRightLocation,
+      backLeftLocation,
+      backRightLocation
+    );
   }
 
   public static final class IntakeConstants {
 
     public static final int indexerMotorPort = 4;
     public static final int intakerShooterMotorPort = 5;
-
   }
 
   public static final class ActuationConstants {
+
     public static final int rightMotorPort = 2;
     public static final int leftMotorPort = 3;
 
@@ -71,6 +86,7 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
+
     public static final int rightRigidClimberPort = 8;
     public static final int leftRigidClimberPort = 9;
     public static final int rightRotatingClimberPort = 6;
@@ -96,6 +112,7 @@ public final class Constants {
   }
 
   public static final class ModuleConstants {
+
     public static final double kWheelRadius = 0.0508;
     public static final double kDriveWheelGearRatio = 6.55;
 
@@ -104,11 +121,13 @@ public final class Constants {
   }
 
   public static final class OIConstants {
+
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
   }
 
   public static final class VisionConstants {
+
     public static final double CAMERA_HEIGHT_METERS = 1;
     public static final double TARGET_HEIGHT_METERS = 2;
     public static final double CAMERA_PITCH_RADIANS = 0;
@@ -116,10 +135,12 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
+
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
+      Math.PI;
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;
@@ -127,6 +148,8 @@ public final class Constants {
 
     // Constraint for the motion profilied robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+      kMaxAngularSpeedRadiansPerSecond,
+      kMaxAngularSpeedRadiansPerSecondSquared
+    );
   }
 }

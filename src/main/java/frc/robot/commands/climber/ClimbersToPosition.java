@@ -6,22 +6,38 @@ import frc.robot.subsystems.RigidClimbers;
 import frc.robot.subsystems.RotatingClimbers;
 
 public class ClimbersToPosition extends ParallelCommandGroup {
-    public ClimbersToPosition(
-            RigidClimbers rigidClimbers,
-            RotatingClimbers rotatingClimbers,
-            double rigidPosition,
-            double rotatingPosition) {
-        addCommands(
-                (new InstantCommand(() -> {
-                    rigidClimbers.setPosition(0);
-                }, rigidClimbers)).withInterrupt(() -> {
-                    return rigidClimbers.atSetpoint();
-                }), // set climber position to 0 once
 
-                (new InstantCommand(() -> {
-                    rotatingClimbers.setPosition(0);
-                }, rotatingClimbers)).withInterrupt(() -> {
-                    return rotatingClimbers.atSetpoint();
-                })); // set climber position to 0 once
-    }
+  public ClimbersToPosition(
+    RigidClimbers rigidClimbers,
+    RotatingClimbers rotatingClimbers,
+    double rigidPosition,
+    double rotatingPosition
+  ) {
+    addCommands(
+      (
+        new InstantCommand(
+          () -> {
+            rigidClimbers.setPosition(rigidPosition);
+          },
+          rigidClimbers
+        )
+      ).withInterrupt(
+          () -> {
+            return rigidClimbers.atSetpoint();
+          }
+        ),
+      (
+        new InstantCommand(
+          () -> {
+            rotatingClimbers.setPosition(rotatingPosition);
+          },
+          rotatingClimbers
+        )
+      ).withInterrupt(
+          () -> {
+            return rotatingClimbers.atSetpoint();
+          }
+        )
+    );
+  }
 }

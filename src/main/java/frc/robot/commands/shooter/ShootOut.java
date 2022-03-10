@@ -6,17 +6,15 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeShooter;
 
 public class ShootOut extends ParallelCommandGroup {
-	public ShootOut(
-			IntakeShooter intakeShooter,
-			Indexer indexer) {
-		addCommands(
-				new StartEndCommand(
-						intakeShooter::shootOut,
-						intakeShooter::stop,
-						intakeShooter),
-				new StartEndCommand(
-						indexer::indexerOut,
-						indexer::stop,
-						indexer));
-	}
+
+  public ShootOut(IntakeShooter intakeShooter, Indexer indexer) {
+    addCommands(
+      new StartEndCommand(
+        intakeShooter::shootOut,
+        intakeShooter::stop,
+        intakeShooter
+      ),
+      new StartEndCommand(indexer::indexerOut, indexer::stop, indexer)
+    );
+  }
 }
