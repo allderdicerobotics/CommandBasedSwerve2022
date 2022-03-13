@@ -58,41 +58,51 @@ public final class Constants {
 
     public static final double ks = 0.0;
     public static final double kcos = 0.5;
-    public static final double kv = 1.75;
-    public static final double kp = 0.75;
+    public static final double kv = 1.0;
+    public static final double kp = 4.0;
     public static final double ki = 0.0;
     public static final double kd = 0.0;
 
     public static final double kMaxAngularVelocity = 2;
     public static final double kMaxAngularAcceleration = 2;
 
-    public static final double downPosition = 0;
+    public static final double downPosition = 0.0;
     public static final double upPosition = 1.2;
   }
 
-  public static final class ClimberConstants {
+  public static final class ClimberConstants { // rotates ~0-40
     public static final int rightRigidClimberPort = 8;
     public static final int leftRigidClimberPort = 9;
     public static final int rightRotatingClimberPort = 6;
     public static final int leftRotatingClimberPort = 7;
 
-    public static final double rigidPIDTolerance = 2;
-    public static final double rotatingPIDTolerance = 2;
+    public static final double rigidPIDTolerance = 10.0;
+    public static final double rotatingPIDTolerance = 5;
 
     public static final double maxRigidSetpoint = 10;
     public static final double minRigidSetpoint = 0;
 
-    public static final double RIGID_CLIMBERS_MAX = 10; // TODO: get these
-    public static final double RIGID_CLIMBERS_MIN = 0;
-    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR = 3.14;
-    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR = 8;
+    public static final double RIGID_CLIMBERS_MAX = 229; // TODO: get these
+    public static final double RIGID_CLIMBERS_MIN = -5;
+    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR = 7.5;
+    public static final double RIGID_CLIMBERS_RELEASE_BAR = 50;
+    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR = 30;
     public static final double RIGID_CLIMBERS_HALF = RIGID_CLIMBERS_MAX / 2;
+
+    public static final double ROTATING_CLIMBERS_ON_BAR = 25;
+    public static final double ROTATING_CLIMBERS_RELEASE_BAR = 22;
+    public static final double ROTATING_CLIMBERS_PAST_BAR = 75;
+    public static final double ROTATING_CLIMBERS_GRAB_BAR = 57;
 
     public static final double ROTATING_CLIMBERS_F_SM = 10;
     public static final double ROTATING_CLIMBERS_B_SM = 0;
     public static final double ROTATING_CLIMBERS_F_L = 9;
     public static final double ROTATING_CLIMBERS_B_ROTATING_ON_BAR = 7;
     public static final double ROTATING_CLIMBERS_B_ROTATING_OFF_BAR = 3;
+
+    public static final double rigidHomeCurrent = 10;
+    public static final double rigidHomeSpeed = 0.4;
+    public static final double rotatingHomeCurrent = 1;
   }
 
   public static final class ModuleConstants {

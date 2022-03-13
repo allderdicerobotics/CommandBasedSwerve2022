@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
@@ -19,8 +20,14 @@ public class RotatingClimbers extends SubsystemBase {
         private final CANSparkMax rightRotatingClimber = new CANSparkMax(
                         Constants.ClimberConstants.rightRotatingClimberPort, MotorType.kBrushless);
 
-        private final MotorControllerGroup rotatingClimberGroup = new MotorControllerGroup(leftRotatingClimber,
-                        rightRotatingClimber);
+        // private final MotorControllerGroup rotatingClimberGroup = new
+        // MotorControllerGroup(leftRotatingClimber,
+        // rightRotatingClimber);
+
+        public RotatingClimbers() {
+                leftRotatingClimber.setInverted(true);
+                rightRotatingClimber.setInverted(false);
+        }
 
         public void setPosition(double desiredPosition) {
                 this.currentSetpoint = desiredPosition;
@@ -31,7 +38,10 @@ public class RotatingClimbers extends SubsystemBase {
         }
 
         public void setSpeed(double desiredSpeed) {
-                rotatingClimberGroup.set(desiredSpeed);
+                leftRotatingClimber.set(desiredSpeed);
+                rightRotatingClimber.set(desiredSpeed);
+                SmartDashboard.putNumber("left rotating pos", leftRotatingClimber.getEncoder().getPosition());
+                SmartDashboard.putNumber("right rotating pos", rightRotatingClimber.getEncoder().getPosition());
         }
 
         public boolean atSetpoint() {
@@ -39,6 +49,7 @@ public class RotatingClimbers extends SubsystemBase {
                 double leftError = Math.abs(this.currentSetpoint - leftCurrentPosition);
                 double rightCurrentPosition = rightRotatingClimber.getEncoder().getPosition();
                 double rightError = Math.abs(this.currentSetpoint - rightCurrentPosition);
+                System.out.println("rotating at setpoint");
                 return (leftError < ClimberConstants.rotatingPIDTolerance
                                 && rightError < ClimberConstants.rotatingPIDTolerance);
         }

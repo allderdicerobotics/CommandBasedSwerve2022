@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ActuationConstants;
@@ -22,7 +23,7 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
   private final CANSparkMax followingActuationMotor = new CANSparkMax(ActuationConstants.leftMotorPort,
       MotorType.kBrushless);
 
-  private RelativeEncoder actuationEncoder;
+  private DutyCycleEncoder actuationEncoder;
 
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
@@ -39,8 +40,8 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
 
   @Override
   public double getMeasurement() {
-    SmartDashboard.putNumber("Intake Actuation Position", actuationEncoder.getPosition());
-    return actuationEncoder.getPosition();
+    SmartDashboard.putNumber("Intake Actuation Position", actuationEncoder.getDistance() + 5.4);
+    return actuationEncoder.getDistance() + 5.4;
   }
 
   public IntakeActuation() {
@@ -52,9 +53,9 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     pidController.setTolerance(0.025);
     pidController.setIntegratorRange(-2.0, 2.0);
     leadingActuationMotor.setInverted(false);
-    actuationEncoder = leadingActuationMotor.getEncoder();
-    actuationEncoder.setPositionConversionFactor(2 * Math.PI / 20);
-    actuationEncoder.setVelocityConversionFactor(2 * Math.PI / 20);
+    actuationEncoder = new DutyCycleEncoder(0);
+    actuationEncoder.setDistancePerRotation(-2 * Math.PI);
+
     // actuationEncoder.setInverted(true);
     followingActuationMotor.follow(leadingActuationMotor, true);
     enable();

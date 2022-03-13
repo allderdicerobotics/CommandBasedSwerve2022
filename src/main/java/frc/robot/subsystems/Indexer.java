@@ -32,6 +32,6 @@ public class Indexer extends SubsystemBase {
   }
 
   public void indexerOut() {
-    setSpeed(0.5); // TODO: set speed
+    setSpeed(1.0); // TODO: set speed
   }
 }
