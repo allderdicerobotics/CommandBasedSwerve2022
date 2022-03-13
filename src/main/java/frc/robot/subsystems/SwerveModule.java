@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -30,13 +29,25 @@ public class SwerveModule {
   private final SparkMaxPIDController drivePIDController;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(1.1, 0, 0,
-      new TrapezoidProfile.Constraints(
-          Constants.ModuleConstants.kModuleMaxAngularVelocity,
-          Constants.ModuleConstants.kModuleMaxAngularAcceleration));
+  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
+    1.1,
+    0,
+    0,
+    new TrapezoidProfile.Constraints(
+      Constants.ModuleConstants.kModuleMaxAngularVelocity,
+      Constants.ModuleConstants.kModuleMaxAngularAcceleration
+    )
+  );
 
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.33217, 2.5407, 0.52052);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.25, 0.2);
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(
+    0.33217,
+    2.5407,
+    0.52052
+  );
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(
+    0.25,
+    0.2
+  );
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
@@ -48,7 +59,11 @@ public class SwerveModule {
    *                              ROTATION OFFSET
    */
 
-  public SwerveModule(int driveMotorID, int turningMotorID, ThriftyEncoder thriftyEncoder) {
+  public SwerveModule(
+    int driveMotorID,
+    int turningMotorID,
+    ThriftyEncoder thriftyEncoder
+  ) {
     driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     turningMotor = new CANSparkMax(turningMotorID, MotorType.kBrushless);
 
@@ -67,7 +82,10 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(driveEncoder.getVelocity(), turningEncoder.getPosition());
+    return new SwerveModuleState(
+      driveEncoder.getVelocity(),
+      turningEncoder.getPosition()
+    );
   }
 
   /**
@@ -78,23 +96,46 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
-        // SwerveModuleState.optimize(desiredState, new
-        // Rotation2d(m_turningEncoder.get()));
-        SwerveModuleState.optimize(desiredState, turningEncoder.getPosition());
-    SmartDashboard.putNumber("optimized state" + this.turningMotor.getDeviceId(), state.angle.getRadians());
+      // SwerveModuleState.optimize(desiredState, new
+      // Rotation2d(m_turningEncoder.get()));
+      SwerveModuleState.optimize(desiredState, turningEncoder.getPosition());
+    SmartDashboard.putNumber(
+      "optimized state" + this.turningMotor.getDeviceId(),
+      state.angle.getRadians()
+    );
 
     // Calculate the drive output from the drive PID controller.
-    final double driveFeedforwardOut = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+    final double driveFeedforwardOut = m_driveFeedforward.calculate(
+      state.speedMetersPerSecond
+    );
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = turningPIDController.calculate(turningEncoder.getPositionRadians(),
-        state.angle.getRadians());
-    SmartDashboard.putNumber("turn voltage out" + this.turningMotor.getDeviceId(), turnOutput);
+    final double turnOutput = turningPIDController.calculate(
+      turningEncoder.getPositionRadians(),
+      state.angle.getRadians()
+    );
+    SmartDashboard.putNumber(
+      "turn voltage out" + this.turningMotor.getDeviceId(),
+      turnOutput
+    );
 
-    final double turnFeedforwardOut = m_turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
-    final double driveMotorRPM = state.speedMetersPerSecond * 60 / Math.PI / Constants.ModuleConstants.kWheelRadius / 2
-        * Constants.ModuleConstants.kDriveWheelGearRatio;
-    drivePIDController.setReference(driveMotorRPM, ControlType.kVelocity, 2, driveFeedforwardOut, ArbFFUnits.kVoltage);
+    final double turnFeedforwardOut = m_turnFeedforward.calculate(
+      turningPIDController.getSetpoint().velocity
+    );
+    final double driveMotorRPM =
+      state.speedMetersPerSecond *
+      60 /
+      Math.PI /
+      Constants.ModuleConstants.kWheelRadius /
+      2 *
+      Constants.ModuleConstants.kDriveWheelGearRatio;
+    drivePIDController.setReference(
+      driveMotorRPM,
+      ControlType.kVelocity,
+      2,
+      driveFeedforwardOut,
+      ArbFFUnits.kVoltage
+    );
     turningMotor.setVoltage(turnOutput + turnFeedforwardOut);
   }
 

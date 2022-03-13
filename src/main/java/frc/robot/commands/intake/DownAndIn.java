@@ -7,12 +7,19 @@ import frc.robot.subsystems.IntakeActuation;
 import frc.robot.subsystems.IntakeShooter;
 
 public class DownAndIn extends ParallelCommandGroup {
-	public DownAndIn(
-			IntakeActuation actuation,
-			IntakeShooter intakeShooter,
-			Indexer indexer) {
-		addCommands(
-				new StartEndCommand(actuation::setPositionDown, actuation::setPositionUp, actuation),
-				new RollersIn(intakeShooter, indexer));
-	}
+
+  public DownAndIn(
+    IntakeActuation actuation,
+    IntakeShooter intakeShooter,
+    Indexer indexer
+  ) {
+    addCommands(
+      new StartEndCommand(
+        actuation::setPositionDown,
+        actuation::setPositionUp,
+        actuation
+      ),
+      new RollersIn(intakeShooter, indexer)
+    );
+  }
 }
