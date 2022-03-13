@@ -28,6 +28,6 @@
         }
     ],
     "java.test.defaultConfig": "WPIlibUnitTests",
-    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m",
-    "google-java-format.executable": "${workspaceRoot}/format/google-java-format-1.15.0.jar"
+    "java.format.settings.url": "https://gist.githubusercontent.com/allderdicerobotics/7b55bc6995978c1716953e2a2429eef5/raw/d7ebdcc09e10e58ee7a766bd8fc3be028be6841c/java-style.xml",
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m"
 }

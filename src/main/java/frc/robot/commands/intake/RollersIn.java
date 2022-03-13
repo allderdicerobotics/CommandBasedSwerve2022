@@ -6,15 +6,17 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeShooter;
 
 public class RollersIn extends ParallelCommandGroup {
-
-  public RollersIn(IntakeShooter intakeShooter, Indexer indexer) {
-    addCommands(
-      new StartEndCommand(
-        intakeShooter::runIn,
-        intakeShooter::stop,
-        intakeShooter
-      ),
-      new StartEndCommand(indexer::indexerInFast, indexer::stop, indexer)
-    );
-  }
+	public RollersIn(
+			IntakeShooter intakeShooter,
+			Indexer indexer) {
+		addCommands(
+				new StartEndCommand(
+						intakeShooter::runIn,
+						intakeShooter::stop,
+						intakeShooter),
+				new StartEndCommand(
+						indexer::indexerInFast,
+						indexer::stop,
+						indexer));
+	}
 }

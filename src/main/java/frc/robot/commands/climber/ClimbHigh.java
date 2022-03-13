@@ -6,11 +6,7 @@ import frc.robot.subsystems.RotatingClimbers;
 
 //climb high
 public class ClimbHigh extends SequentialCommandGroup {
-
-  public ClimbHigh(
-    RigidClimbers rigidClimbers,
-    RotatingClimbers rotatingClimbers
-  ) {
-    addCommands(); // TODO
-  }
+    public ClimbHigh(RigidClimbers rigidClimbers, RotatingClimbers rotatingClimbers) {
+        addCommands(); // TODO
+    }
 }
