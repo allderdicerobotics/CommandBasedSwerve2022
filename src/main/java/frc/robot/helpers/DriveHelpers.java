@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveHelpers {
-    public static CommandBase timedDrive(DriveSubsystem drive, double xSpeed, double ySpeed, double rot,
+    public static CommandBase timedDrive(DriveSubsystem drive, double xSpeed, double ySpeed,
+            double rot,
             boolean fieldRelative, int seconds) {
         return (new StartEndCommand(
                 () -> {

@@ -12,8 +12,9 @@ import com.revrobotics.CANSparkMax;
 // get can id of indexer spark max, set the speed of the motor, define methods
 public class IntakeShooter extends SubsystemBase {
 
-  private final CANSparkMax intakeShooterMotor = new CANSparkMax(Constants.IntakeConstants.intakerShooterMotorPort,
-      MotorType.kBrushless);
+  private final CANSparkMax intakeShooterMotor =
+      new CANSparkMax(Constants.IntakeConstants.intakerShooterMotorPort,
+          MotorType.kBrushless);
 
   public void setSpeed(double speed) {
     intakeShooterMotor.set(speed);

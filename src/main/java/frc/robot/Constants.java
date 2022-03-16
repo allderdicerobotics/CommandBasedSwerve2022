@@ -10,12 +10,14 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean constants. This class should not be used for any other
- * purpose. All constants should be declared globally (i.e. public static). Do
- * not put anything functional in this class.
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
+ * globally (i.e. public static). Do not put anything functional in this class.
  *
  * It is advised to statically import this class (or one of its inner classes)
- * wherever the constants are needed, to reduce verbosity.
+ * wherever the
+ * constants are needed, to reduce verbosity.
  */
 public final class Constants {
   public static final class DriveConstants {
@@ -76,6 +78,11 @@ public final class Constants {
     public static final int rightRotatingClimberPort = 6;
     public static final int leftRotatingClimberPort = 7;
 
+    // public static final int leftRigidLimitSwitchPort = 5;
+    // public static final int rightRigidLimitSwitchPort = 7;
+    // public static final int leftRotatingLimitSwitchPort = 8;
+    // public static final int rightRotatingLimitSwitchPort = 9;
+
     public static final double rigidPIDTolerance = 10.0;
     public static final double rotatingPIDTolerance = 5;
 
@@ -84,20 +91,23 @@ public final class Constants {
 
     public static final double RIGID_CLIMBERS_MAX = 229; // TODO: get these
     public static final double RIGID_CLIMBERS_MIN = -5;
-    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR = 7.5;
+    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR = 10;
+    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR_SECOND = 20;
     public static final double RIGID_CLIMBERS_RELEASE_BAR = 50;
-    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR = 30;
-    public static final double RIGID_CLIMBERS_HALF = RIGID_CLIMBERS_MAX / 2;
+    public static final double RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR = 40;
+    public static final double RIGID_CLIMBERS_HALF = 110;
 
-    public static final double ROTATING_CLIMBERS_ON_BAR = 25;
-    public static final double ROTATING_CLIMBERS_RELEASE_BAR = 22;
-    public static final double ROTATING_CLIMBERS_PAST_BAR = 75;
-    public static final double ROTATING_CLIMBERS_GRAB_BAR = 57;
+    public static final double ROTATING_CLIMBERS_ON_BAR = 18;
+    public static final double ROTATING_CLIMBERS_RELEASE_BAR = 35;
+    public static final double ROTATING_CLIMBERS_PAST_BAR = 61;
+    public static final double ROTATING_CLIMBERS_GRAB_BAR = 40;
 
     public static final double ROTATING_CLIMBERS_F_SM = 10;
-    public static final double ROTATING_CLIMBERS_B_SM = 0;
+    public static final double ROTATING_CLIMBERS_B_SM = 0; // TODO: can be bigger so that rotating
+                                                           // arms don't have to swing as far
     public static final double ROTATING_CLIMBERS_F_L = 9;
     public static final double ROTATING_CLIMBERS_B_ROTATING_ON_BAR = 7;
+    public static final double ROTATING_CLIMBERS_B_ROTATING_ON_BAR_SECOND = 15;
     public static final double ROTATING_CLIMBERS_B_ROTATING_OFF_BAR = 3;
 
     public static final double rigidHomeCurrent = 10;
@@ -110,7 +120,8 @@ public final class Constants {
     public static final double kDriveWheelGearRatio = 6.55;
 
     public static final double kModuleMaxAngularVelocity = 4 * 2 * Math.PI;
-    public static final double kModuleMaxAngularAcceleration = 4 * 2 * Math.PI; // radians per second squared
+    public static final double kModuleMaxAngularAcceleration = 4 * 2 * Math.PI; // radians per
+                                                                                // second squared
   }
 
   public static final class OIConstants {

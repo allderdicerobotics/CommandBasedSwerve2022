@@ -31,17 +31,37 @@ public class RotatingClimbers extends SubsystemBase {
 
         public void setPosition(double desiredPosition) {
                 this.currentSetpoint = desiredPosition;
-                leftRotatingClimber.getPIDController().setReference(desiredPosition - leftMotorOffset,
+                leftRotatingClimber.getPIDController().setReference(
+                                desiredPosition - leftMotorOffset,
                                 ControlType.kPosition);
-                rightRotatingClimber.getPIDController().setReference(desiredPosition - rightMotorOffset,
+                rightRotatingClimber.getPIDController().setReference(
+                                desiredPosition - rightMotorOffset,
                                 ControlType.kPosition);
+        }
+
+        public double getLeftSpeed() {
+                return leftRotatingClimber.getEncoder().getVelocity();
+        }
+
+        public double getRightSpeed() {
+                return rightRotatingClimber.getEncoder().getVelocity();
+        }
+
+        public void zeroLeft() {
+                leftRotatingClimber.getEncoder().setPosition(0);
+        }
+
+        public void zeroRight() {
+                rightRotatingClimber.getEncoder().setPosition(0);
         }
 
         public void setSpeed(double desiredSpeed) {
                 leftRotatingClimber.set(desiredSpeed);
                 rightRotatingClimber.set(desiredSpeed);
-                SmartDashboard.putNumber("left rotating pos", leftRotatingClimber.getEncoder().getPosition());
-                SmartDashboard.putNumber("right rotating pos", rightRotatingClimber.getEncoder().getPosition());
+                SmartDashboard.putNumber("left rotating pos",
+                                leftRotatingClimber.getEncoder().getPosition());
+                SmartDashboard.putNumber("right rotating pos",
+                                rightRotatingClimber.getEncoder().getPosition());
         }
 
         public boolean atSetpoint() {
@@ -52,5 +72,23 @@ public class RotatingClimbers extends SubsystemBase {
                 System.out.println("rotating at setpoint");
                 return (leftError < ClimberConstants.rotatingPIDTolerance
                                 && rightError < ClimberConstants.rotatingPIDTolerance);
+        }
+
+        public void upHalfSpeed() {
+                leftRotatingClimber.set(0.5);
+                rightRotatingClimber.set(0.5);
+        }
+
+        public void downHalfSpeed() {
+                leftRotatingClimber.set(-0.5);
+                rightRotatingClimber.set(-0.5);
+        }
+
+        public void setSpeedLeft(double desiredSpeed) {
+                leftRotatingClimber.set(desiredSpeed);
+        }
+
+        public void setSpeedRight(double desiredSpeed) {
+                rightRotatingClimber.set(desiredSpeed);
         }
 }

@@ -45,7 +45,8 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
   }
 
   public IntakeActuation() {
-    super(new ProfiledPIDController(ActuationConstants.kp, ActuationConstants.ki, ActuationConstants.kd,
+    super(new ProfiledPIDController(ActuationConstants.kp, ActuationConstants.ki,
+        ActuationConstants.kd,
         new TrapezoidProfile.Constraints(ActuationConstants.kMaxAngularVelocity,
             ActuationConstants.kMaxAngularAcceleration)));
 
@@ -59,6 +60,10 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
     // actuationEncoder.setInverted(true);
     followingActuationMotor.follow(leadingActuationMotor, true);
     enable();
+  }
+
+  public void setSpeed(double desiredSpeed) {
+    setSpeed(desiredSpeed);
   }
 
   public void setPosition(double desiredPosition) {

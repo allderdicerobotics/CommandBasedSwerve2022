@@ -27,17 +27,20 @@ public class DriveSubsystem extends SubsystemBase {
 
   // set up swerve modules
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
-      DriveConstants.kFrontLeftTurningMotorPort, new ThriftyEncoder(new AnalogInput(0), Rotation2d.fromDegrees(30)));
+      DriveConstants.kFrontLeftTurningMotorPort,
+      new ThriftyEncoder(new AnalogInput(0), Rotation2d.fromDegrees(30)));
 
   private final SwerveModule rearLeft = new SwerveModule(DriveConstants.kRearLeftDriveMotorPort,
       DriveConstants.kRearLeftTurningMotorPort,
       new ThriftyEncoder(new AnalogInput(1), Rotation2d.fromDegrees(30)));
 
   private final SwerveModule frontRight = new SwerveModule(DriveConstants.kFrontRightDriveMotorPort,
-      DriveConstants.kFrontRightTurningMotorPort, new ThriftyEncoder(new AnalogInput(2), Rotation2d.fromDegrees(90)));
+      DriveConstants.kFrontRightTurningMotorPort,
+      new ThriftyEncoder(new AnalogInput(2), Rotation2d.fromDegrees(90)));
 
   private final SwerveModule rearRight = new SwerveModule(DriveConstants.kRearRightDriveMotorPort,
-      DriveConstants.kRearRightTurningMotorPort, new ThriftyEncoder(new AnalogInput(3), Rotation2d.fromDegrees(30)));
+      DriveConstants.kRearRightTurningMotorPort,
+      new ThriftyEncoder(new AnalogInput(3), Rotation2d.fromDegrees(30)));
 
   // The NavX
   // TODO: FIX NAVX CONFIGURATION NOW THAT IT'S VERTICAL
@@ -54,7 +57,8 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    odometry.update(navX.getRotation2d(), frontLeft.getState(), frontRight.getState(), rearLeft.getState(),
+    odometry.update(navX.getRotation2d(), frontLeft.getState(), frontRight.getState(),
+        rearLeft.getState(),
         rearRight.getState());
   }
 
@@ -91,7 +95,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates = DriveConstants.kinematics
         .toSwerveModuleStates(
-            fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, navX.getRotation2d())
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, navX.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
     frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -111,16 +116,17 @@ public class DriveSubsystem extends SubsystemBase {
   public void driveWithJoystick(double leftX, double leftY, double rightX, boolean fieldRelative) {
     // Get the x speed. We are inverting this because Playstation controllers return
     // negative values when we push forward.
-    final var xSpeed = xspeedLimiter.calculate(MathUtil.applyDeadband(leftX, 0.05)) * DriveConstants.kMaxSpeed;
+    final var xSpeed = xspeedLimiter.calculate(MathUtil.applyDeadband(leftX, 0.1)) * DriveConstants.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left.
-    final var ySpeed = -yspeedLimiter.calculate(MathUtil.applyDeadband(leftY, 0.05)) * DriveConstants.kMaxSpeed;
+    final var ySpeed = -yspeedLimiter.calculate(MathUtil.applyDeadband(leftY, 0.1)) * DriveConstants.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics).
-    final var rot = -rotLimiter.calculate(MathUtil.applyDeadband(rightX, 0.05)) * DriveConstants.kMaxAngularSpeed;
+    final var rot = -rotLimiter.calculate(MathUtil.applyDeadband(rightX, 0.05))
+        * DriveConstants.kMaxAngularSpeed;
 
     // SmartDashboard.putNumber("Joystick X Speed", leftX);
     // SmartDashboard.putNumber("Joystick Y Speed", leftY);

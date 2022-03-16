@@ -9,6 +9,8 @@ import frc.robot.subsystems.RotatingClimbers;
 public class ClimbMid extends SequentialCommandGroup {
         public ClimbMid(RigidClimbers rigidClimbers, RotatingClimbers rotatingClimbers) {
                 addCommands(
+                                // new RigidLimitSwitchZero(rigidClimbers),
+                                // new RotatingLimitSwitchZero(rotatingClimbers),
                                 // new HomeRigidClimbers(rigidClimbers)
                                 // new ClimbersToPosition(
                                 // rigidClimbers,
@@ -19,7 +21,7 @@ public class ClimbMid extends SequentialCommandGroup {
                                 new ClimbersToPosition(
                                                 rigidClimbers,
                                                 rotatingClimbers,
-                                                ClimberConstants.RIGID_CLIMBERS_MIN,
+                                                ClimberConstants.RIGID_CLIMBERS_MAX, // was MIN ??
                                                 ClimberConstants.ROTATING_CLIMBERS_B_SM));
 
                 // lift rigid arms, turn rotating ones away from mid bar

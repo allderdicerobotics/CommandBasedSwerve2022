@@ -9,8 +9,8 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeActuation;
 import frc.robot.subsystems.IntakeShooter;
 
-public class HalfwayShoot extends SequentialCommandGroup {
-	public HalfwayShoot(
+public class BackwardsShoot extends SequentialCommandGroup {
+	public BackwardsShoot(
 			IntakeActuation actuation,
 			IntakeShooter intakeShooter,
 			Indexer indexer) {
@@ -19,6 +19,6 @@ public class HalfwayShoot extends SequentialCommandGroup {
 					actuation.setPosition(1.2);
 				}, actuation),
 				new WaitCommand(1),
-				new ShootOut(intakeShooter, indexer));
+				new Shoot(intakeShooter, indexer));
 	}
 }

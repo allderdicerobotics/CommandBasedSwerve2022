@@ -81,7 +81,8 @@ public class SwerveModule {
         // SwerveModuleState.optimize(desiredState, new
         // Rotation2d(m_turningEncoder.get()));
         SwerveModuleState.optimize(desiredState, turningEncoder.getPosition());
-    SmartDashboard.putNumber("optimized state" + this.turningMotor.getDeviceId(), state.angle.getRadians());
+    SmartDashboard.putNumber("optimized state" + this.turningMotor.getDeviceId(),
+        state.angle.getRadians());
 
     // Calculate the drive output from the drive PID controller.
     final double driveFeedforwardOut = m_driveFeedforward.calculate(state.speedMetersPerSecond);
@@ -94,7 +95,8 @@ public class SwerveModule {
     final double turnFeedforwardOut = m_turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
     final double driveMotorRPM = state.speedMetersPerSecond * 60 / Math.PI / Constants.ModuleConstants.kWheelRadius / 2
         * Constants.ModuleConstants.kDriveWheelGearRatio;
-    drivePIDController.setReference(driveMotorRPM, ControlType.kVelocity, 2, driveFeedforwardOut, ArbFFUnits.kVoltage);
+    drivePIDController.setReference(driveMotorRPM, ControlType.kVelocity, 2, driveFeedforwardOut,
+        ArbFFUnits.kVoltage);
     turningMotor.setVoltage(turnOutput + turnFeedforwardOut);
   }
 

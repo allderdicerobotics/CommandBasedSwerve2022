@@ -36,7 +36,8 @@ public class RigidClimbers extends SubsystemBase {
                 double leftError = Math.abs(this.currentSetpoint - leftCurrentPosition);
                 double rightCurrentPosition = rightRigidClimber.getEncoder().getPosition();
                 double rightError = Math.abs(this.currentSetpoint - rightCurrentPosition);
-                System.out.println("atSetpoint called" + this.currentSetpoint + " position " + leftCurrentPosition + " "
+                System.out.println("atSetpoint called" + this.currentSetpoint + " position "
+                                + leftCurrentPosition + " "
                                 + rightCurrentPosition);
                 return (leftError < ClimberConstants.rigidPIDTolerance
                                 && rightError < ClimberConstants.rigidPIDTolerance);
@@ -65,6 +66,14 @@ public class RigidClimbers extends SubsystemBase {
         }
         // get left current
 
+        public double getLeftSpeed() {
+                return leftRigidClimber.getEncoder().getVelocity();
+        }
+
+        public double getRightSpeed() {
+                return rightRigidClimber.getEncoder().getVelocity();
+        }
+
         public void zeroLeft() {
                 leftRigidClimber.getEncoder().setPosition(0);
         }
@@ -75,11 +84,23 @@ public class RigidClimbers extends SubsystemBase {
 
         public void setSpeed(double desiredSpeed) {
                 rigidClimberGroup.set(desiredSpeed);
-                SmartDashboard.putNumber("left rigid pos", leftRigidClimber.getEncoder().getPosition());
-                SmartDashboard.putNumber("right rigid pos", rightRigidClimber.getEncoder().getPosition());
+                SmartDashboard.putNumber("left rigid pos",
+                                leftRigidClimber.getEncoder().getPosition());
+                SmartDashboard.putNumber("right rigid pos",
+                                rightRigidClimber.getEncoder().getPosition());
 
         }
         // set speed
+
+        public void upHalfSpeed() {
+                leftRigidClimber.set(0.5);
+                rightRigidClimber.set(0.5);
+        }
+
+        public void downHalfSpeed() {
+                leftRigidClimber.set(-0.5);
+                rightRigidClimber.set(-0.5);
+        }
 
         public void setSpeedLeft(double desiredSpeed) {
                 leftRigidClimber.set(desiredSpeed);

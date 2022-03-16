@@ -12,7 +12,8 @@ public class DownAndIn extends ParallelCommandGroup {
 			IntakeShooter intakeShooter,
 			Indexer indexer) {
 		addCommands(
-				new StartEndCommand(actuation::setPositionDown, actuation::setPositionUp, actuation),
+				new StartEndCommand(actuation::setPositionDown, actuation::setPositionUp,
+						actuation),
 				new RollersIn(intakeShooter, indexer));
 	}
 }

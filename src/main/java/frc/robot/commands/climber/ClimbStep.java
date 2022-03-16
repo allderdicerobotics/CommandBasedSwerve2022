@@ -1,6 +1,7 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.RigidClimbers;
 import frc.robot.subsystems.RotatingClimbers;
@@ -12,31 +13,97 @@ public class ClimbStep extends SequentialCommandGroup {
                                                 rigidClimbers,
                                                 rotatingClimbers,
                                                 ClimberConstants.RIGID_CLIMBERS_MIN,
+                                                ClimberConstants.ROTATING_CLIMBERS_B_SM),
+                                new ClimbersToPosition(
+                                                rigidClimbers,
+                                                rotatingClimbers,
+                                                ClimberConstants.RIGID_CLIMBERS_MIN,
+                                                ClimberConstants.ROTATING_CLIMBERS_B_SM),
+                                new ClimbersToPosition(
+                                                rigidClimbers,
+                                                rotatingClimbers,
+                                                ClimberConstants.RIGID_CLIMBERS_MIN,
                                                 ClimberConstants.ROTATING_CLIMBERS_ON_BAR),
-                                // lift robot up, get rotating climbers on bar
+                                new WaitCommand(1),
                                 new ClimbersToPosition(
                                                 rigidClimbers,
                                                 rotatingClimbers,
                                                 ClimberConstants.RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR,
-                                                ClimberConstants.ROTATING_CLIMBERS_RELEASE_BAR),
-                                // lower robot so that rotating arms hook on bar
+                                                ClimberConstants.ROTATING_CLIMBERS_ON_BAR),
                                 new ClimbersToPosition(
                                                 rigidClimbers,
                                                 rotatingClimbers,
                                                 ClimberConstants.RIGID_CLIMBERS_RELEASE_BAR,
-                                                ClimberConstants.ROTATING_CLIMBERS_RELEASE_BAR),
-                                // raise rigid climbers half way
+                                                ClimberConstants.ROTATING_CLIMBERS_ON_BAR),
+                                new WaitCommand(1),
+                                new ClimbersToPosition(
+                                                rigidClimbers,
+                                                rotatingClimbers,
+                                                ClimberConstants.RIGID_CLIMBERS_RELEASE_BAR,
+                                                ClimberConstants.ROTATING_CLIMBERS_PAST_BAR),
                                 new ClimbersToPosition(
                                                 rigidClimbers,
                                                 rotatingClimbers,
                                                 ClimberConstants.RIGID_CLIMBERS_MAX,
                                                 ClimberConstants.ROTATING_CLIMBERS_PAST_BAR),
-                                // turn robot a lot so that rigid arms are past next bar
                                 new ClimbersToPosition(
                                                 rigidClimbers,
                                                 rotatingClimbers,
                                                 ClimberConstants.RIGID_CLIMBERS_MAX,
-                                                ClimberConstants.ROTATING_CLIMBERS_GRAB_BAR)
+                                                ClimberConstants.ROTATING_CLIMBERS_GRAB_BAR),
+                                new ClimbersToPosition(
+                                                rigidClimbers,
+                                                rotatingClimbers,
+                                                ClimberConstants.RIGID_CLIMBERS_HALF,
+                                                ClimberConstants.ROTATING_CLIMBERS_GRAB_BAR),
+                                new ClimbersToPosition(
+                                                rigidClimbers,
+                                                rotatingClimbers,
+                                                ClimberConstants.RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR,
+                                                ClimberConstants.ROTATING_CLIMBERS_B_SM),
+                                new WaitCommand(3),
+                                new ClimbersToPosition(
+                                                rigidClimbers,
+                                                rotatingClimbers,
+                                                ClimberConstants.RIGID_CLIMBERS_MIN,
+                                                ClimberConstants.ROTATING_CLIMBERS_B_SM));
+                // new ClimbersToPosition(
+                // rigidClimbers,
+                // rotatingClimbers,
+                // ClimberConstants.RIGID_CLIMBERS_MIN,
+                // ClimberConstants.ROTATING_CLIMBERS_B_ROTATING_ON_BAR), // SECOND
+                // new WaitCommand(1),
+                // new ClimbersToPosition(
+                // rigidClimbers,
+                // rotatingClimbers,
+                // ClimberConstants.RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR, // SECOND
+                // ClimberConstants.ROTATING_CLIMBERS_ON_BAR),
+                // new ClimbersToPosition(
+                // rigidClimbers,
+                // rotatingClimbers,
+                // ClimberConstants.RIGID_CLIMBERS_RELEASE_BAR,
+                // ClimberConstants.ROTATING_CLIMBERS_ON_BAR), //works
+                // new WaitCommand(1),
+                // new ClimbersToPosition(
+                // rigidClimbers,
+                // rotatingClimbers,
+                // ClimberConstants.RIGID_CLIMBERS_RELEASE_BAR,
+                // ClimberConstants.ROTATING_CLIMBERS_PAST_BAR));
+
+                // lift robot up, get rotating climbers on bar
+
+                // raise rigid climbers half way
+                // new ClimbersToPosition(
+                // rigidClimbers,
+                // rotatingClimbers,
+                // ClimberConstants.RIGID_CLIMBERS_MAX,
+                // ClimberConstants.ROTATING_CLIMBERS_PAST_BAR),
+                // // turn robot a lot so that rigid arms are past next bar
+                // new ClimbersToPosition(
+                // rigidClimbers,
+                // rotatingClimbers,
+                // ClimberConstants.RIGID_CLIMBERS_MAX,
+                // ClimberConstants.ROTATING_CLIMBERS_GRAB_BAR)
                 // extend rigid arms to max
                 // new ClimbersToPosition(
                 // rigidClimbers,
@@ -67,7 +134,7 @@ public class ClimbStep extends SequentialCommandGroup {
                 // rotatingClimbers,
                 // ClimberConstants.RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR,
                 // ClimberConstants.ROTATING_CLIMBERS_B_SM));
-                );
+
                 // turn rotating arms so that they move to other side of the bar
         }
 }

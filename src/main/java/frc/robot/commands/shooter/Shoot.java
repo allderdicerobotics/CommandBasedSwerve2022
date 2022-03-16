@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeShooter;
 
-public class ShootOut extends ParallelCommandGroup {
-	public ShootOut(
+public class Shoot extends ParallelCommandGroup {
+	public Shoot(
 			IntakeShooter intakeShooter,
 			Indexer indexer) {
 		addCommands(

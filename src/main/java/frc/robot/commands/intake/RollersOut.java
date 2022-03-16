@@ -11,7 +11,7 @@ public class RollersOut extends ParallelCommandGroup {
 			Indexer indexer) {
 		addCommands(
 				new StartEndCommand(
-						intakeShooter::runOutSlow,
+						intakeShooter::shootOut,
 						intakeShooter::stop,
 						intakeShooter),
 				new StartEndCommand(
