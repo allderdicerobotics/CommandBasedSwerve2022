@@ -182,6 +182,46 @@ public class RobotContainer {
 
     new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(intakeActuation::setPositionDown));
 
+    new JoystickButton(buttonBoard, 12).whenPressed(new PrintCommand("climb traversal"));
+
+    new JoystickButton(buttonBoard, 6).whenPressed(new ClimbMid(rigidClimbers, rotatingClimbers));
+
+    new JoystickButton(buttonBoard, 5).whenPressed(new ClimbStep(rigidClimbers, rotatingClimbers));
+
+    new JoystickButton(buttonBoard, 8).whenPressed(new ClimbTraversal(rigidClimbers, rotatingClimbers));
+
+    new JoystickButton(buttonBoard, 4).whenHeld(
+        new StartEndCommand(() -> {
+          rigidClimbers.setSpeed(0.25);
+        }, () -> {
+          rigidClimbers.setSpeed(0);
+        }, rigidClimbers));
+
+    new JoystickButton(buttonBoard, 7).whenHeld(
+        new StartEndCommand(() -> {
+          rigidClimbers.setSpeed(-0.25);
+        }, () -> {
+          rigidClimbers.setSpeed(0);
+        }, rigidClimbers));
+
+    new JoystickButton(buttonBoard, 3).whenHeld(
+        new StartEndCommand(() -> {
+          rotatingClimbers.setSpeed(0.25);
+        }, () -> {
+          rotatingClimbers.setSpeed(0);
+        }, rigidClimbers));
+
+    new JoystickButton(buttonBoard, 1).whenHeld(
+        new StartEndCommand(() -> {
+          rotatingClimbers.setSpeed(-0.25);
+        }, () -> {
+          rotatingClimbers.setSpeed(0);
+        }, rigidClimbers));
+
+    new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(intakeActuation::setPositionUp));
+
+    new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(intakeActuation::setPositionDown));
+
     new JoystickButton(buttonBoard, 12).whenPressed(new ClimbTraversal(rigidClimbers, rotatingClimbers));
 
     // private void configureButtonBindings() {
@@ -233,12 +273,12 @@ public class RobotContainer {
     // rigidClimbers.setSpeed(0);
     // }, rigidClimbers));
 
-    new JoystickButton(driverController, 4).whenHeld(
-        new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(-0.25);
-        }, () -> {
-          rigidClimbers.setSpeed(0);
-        }, rigidClimbers));
+    // new JoystickButton(driverController, 4).whenHeld(
+    //     new StartEndCommand(() -> {
+    //       rigidClimbers.setSpeed(-0.25);
+    //     }, () -> {
+    //       rigidClimbers.setSpeed(0);
+    //     }, rigidClimbers));
 
     // assign button to rotate arm forward when held
     // new JoystickButton(driverController, 5).whenHeld(
@@ -310,6 +350,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
+
+
+
+   
   // follow trajectory with PID
   // public Command getAutonomousCommand() {
   // Create config for trajectory

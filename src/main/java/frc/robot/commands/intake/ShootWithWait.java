@@ -1,12 +1,12 @@
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeShooter;
 
-public class ShootWithWait extends ParallelCommandGroup {
+public class ShootWithWait extends SequentialCommandGroup {
         public ShootWithWait(
                         IntakeShooter intakeShooter,
                         Indexer indexer) {

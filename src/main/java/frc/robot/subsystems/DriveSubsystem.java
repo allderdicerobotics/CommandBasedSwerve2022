@@ -135,6 +135,10 @@ public class DriveSubsystem extends SubsystemBase {
     this.drive(xSpeed, ySpeed, rot, fieldRelative);
   }
 
+  public void stop() {
+    this.drive(0.0, 0.0, 0.0, false);
+  }
+
   public void setModuleStates(SwerveModuleState[] states) {
     // TODO
   }

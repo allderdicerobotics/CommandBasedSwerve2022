@@ -146,6 +146,10 @@ public final class Constants {
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
+    public static final double AUTO_DRIVE_SPEED = 0.5; // not actually known
+    public static final double DEPOSIT_DRIVE_TIME = 2.0; // not actually known
+    public static final double LEAVE_TARMAC_DRIVE_TIME = 3.0; // not actually known
+
     // Constraint for the motion profilied robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
