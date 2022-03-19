@@ -53,7 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Odometry class for tracking robot pose
   private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(DriveConstants.kinematics,
-      navX.getRotation2d());
+      this.getRotation2d());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -62,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    odometry.update(navX.getRotation2d(), frontLeft.getState(), frontRight.getState(),
+    odometry.update(this.getRotation2d(), frontLeft.getState(), frontRight.getState(),
         rearLeft.getState(),
         rearRight.getState());
   }
@@ -82,7 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    odometry.resetPosition(pose, navX.getRotation2d());
+    odometry.resetPosition(pose, this.getRotation2d());
   }
 
   /**
@@ -100,23 +100,26 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void toggleFocOverride() {
-    System.out.println("TOGGLED DRIVESUBSYSTEM FOC OVERRIDE");
+    System.out.print("TOGGLED DRIVESUBSYSTEM FOC OVERRIDE");
     this.overrideFocState = !this.overrideFocState;
+    System.out.printf(" -> %s\n", this.overrideFocState ? "on" : "off");
   }
 
   // Field oriented control
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelativeGiven) {
     boolean fieldRelative = this.evalFocOverride(fieldRelativeGiven);
-    System.out.printf("<recv FOC:%s>", fieldRelative ? false : true);
-    System.out.println("IN DRIVE");
-    System.out.printf(
-        "drive params: xSpeed=%4f, ySpeed=%f, rot=%4f\n",
-        xSpeed, ySpeed, rot);
+    // System.out.printf("<recv FOC:%s>", fieldRelative ? false : true);
+    // System.out.println("IN DRIVE");
+    /*
+     * System.out.printf(
+     * "drive params: xSpeed=%4f, ySpeed=%f, rot=%4f\n",
+     * xSpeed, ySpeed, rot);
+     */
     var swerveModuleStates = DriveConstants.kinematics
         .toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, navX.getRotation2d())
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, this.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
     frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -207,6 +210,15 @@ public class DriveSubsystem extends SubsystemBase {
     rearRight.resetEncoders();
   }
 
+  public Rotation2d getRotation2d() {
+    /*
+     * if (this.overrideFocState) {
+     * return new Rotation2d((navX.getRoll() / 360) * 2 * Math.PI);
+     * }
+     */
+    return navX.getRotation2d();
+  }
+
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     navX.reset();
@@ -218,7 +230,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return navX.getRotation2d().getDegrees();
+    return this.getRotation2d().getDegrees();
   }
 
   /**

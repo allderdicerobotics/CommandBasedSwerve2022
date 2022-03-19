@@ -89,7 +89,7 @@ public final class Constants {
     public static final double maxRigidSetpoint = 10;
     public static final double minRigidSetpoint = 0;
 
-    public static final double RIGID_CLIMBERS_MAX = 200;
+    public static final double RIGID_CLIMBERS_MAX = 175;
 
     ; // TODO: get these
     public static final double RIGID_CLIMBERS_MIN = -5;

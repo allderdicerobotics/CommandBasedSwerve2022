@@ -137,6 +137,11 @@ public class RobotContainer {
 
   // assign intake button
   private void configureButtonBindings() {
+    new JoystickButton(driverController, 5).whenPressed(new InstantCommand(() -> {
+      this.robotDrive.toggleFocOverride();
+      System.out.println("TOGGLED");
+    }));
+
     // new JoystickButton(driverController, 4).whenHeld(
     // new StartEndCommand(() -> {
     // if (intakeActuation == null) {
@@ -237,7 +242,7 @@ public class RobotContainer {
 
     new JoystickButton(buttonBoard, 4).whenHeld(
         new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(0.8);
+          rigidClimbers.setSpeed(0.9);
         }, () -> {
           rigidClimbers.setSpeed(0);
           SmartDashboard.putNumber("climber rigid value", rigidClimbers.getEncoderValue());
@@ -245,7 +250,7 @@ public class RobotContainer {
 
     new JoystickButton(buttonBoard, 7).whenHeld(
         new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(-0.8);
+          rigidClimbers.setSpeed(-0.9);
         }, () -> {
           rigidClimbers.setSpeed(0);
           SmartDashboard.putNumber("climber rigid value", rigidClimbers.getEncoderValue());
