@@ -89,13 +89,15 @@ public final class Constants {
     public static final double maxRigidSetpoint = 10;
     public static final double minRigidSetpoint = 0;
 
-    public static final double RIGID_CLIMBERS_MAX = 229; // TODO: get these
+    public static final double RIGID_CLIMBERS_MAX = 200;
+
+    ; // TODO: get these
     public static final double RIGID_CLIMBERS_MIN = -5;
     public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR = 10;
     public static final double RIGID_CLIMBERS_EXTEND_ROTATING_ON_BAR_SECOND = 20;
     public static final double RIGID_CLIMBERS_RELEASE_BAR = 50;
     public static final double RIGID_CLIMBERS_EXTEND_ROTATING_UNDER_BAR = 40;
-    public static final double RIGID_CLIMBERS_HALF = 110;
+    public static final double RIGID_CLIMBERS_HALF = 120;
 
     public static final double ROTATING_CLIMBERS_ON_BAR = 18;
     public static final double ROTATING_CLIMBERS_RELEASE_BAR = 35;
@@ -146,9 +148,12 @@ public final class Constants {
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
-    public static final double AUTO_DRIVE_SPEED = 0.5; // not actually known
-    public static final double DEPOSIT_DRIVE_TIME = 2.0; // not actually known
-    public static final double LEAVE_TARMAC_DRIVE_TIME = 3.0; // not actually known
+    public static final double AUTO_Y_SPEED = 1.5;
+
+    public static final double AUTO_X_SPEED = 0.0; // not actually known
+    public static final double AUTO_ROTATION_SPEED = 0.0;
+    public static final double DEPOSIT_DRIVE_TIME = 0.5; // not actually known
+    public static final double LEAVE_TARMAC_DRIVE_TIME = 2.0; // not actually known
 
     // Constraint for the motion profilied robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(

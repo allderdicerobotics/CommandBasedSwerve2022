@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -40,6 +41,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.auto.SimpleShoot;
 import frc.robot.commands.climber.ClimbHigh;
 import frc.robot.commands.climber.ClimbMid;
 import frc.robot.commands.climber.ClimbStep;
@@ -53,6 +55,7 @@ import frc.robot.commands.intake.RollersIn;
 import frc.robot.commands.intake.RollersOut;
 import frc.robot.commands.shooter.BackwardsShoot;
 import frc.robot.commands.shooter.Shoot;
+import frc.robot.subsystems.ActuateWOneMotor;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeActuation;
@@ -68,11 +71,12 @@ import frc.robot.subsystems.RotatingClimbers;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem robotDrive = new DriveSubsystem();
+  public final DriveSubsystem robotDrive = new DriveSubsystem();
 
-  private final IntakeActuation intakeActuation = new IntakeActuation();
-  private final IntakeShooter intakeShooter = new IntakeShooter();
-  private final Indexer indexer = new Indexer();
+  // public IntakeActuation intakeActuation; // = new~ IntakeActuation();
+  // public final IntakeShooter intakeShooter = new IntakeShooter();
+  // public final Indexer indexer = new Indexer();
+  // public final ActuateWOneMotor leftActuation = new ActuateWOneMotor();
 
   private final RigidClimbers rigidClimbers = new RigidClimbers();
   private final RotatingClimbers rotatingClimbers = new RotatingClimbers();
@@ -95,13 +99,24 @@ public class RobotContainer {
     robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        new RunCommand(() -> robotDrive.driveWithJoystick(driverController.getLeftX(),
+        new RunCommand(() -> robotDrive.driveWithJoystick(
+            driverController.getLeftX(),
             driverController.getLeftY(),
-            driverController.getRightX(), false), robotDrive));
+            driverController.getRightX(), (() -> this.getFocState())), robotDrive));
+  }
+
+  private boolean getFocState() {
+    return this.robotDrive.evalFocOverride(true);
+  }
+
+  private void toggleFocState() {
+    this.robotDrive.toggleFocOverride();
   }
 
   // get trajectory json
   private void robotInit() {
+    // leftActuation.setBrake();
+
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve("src/main/deploy/Simplehy.wpilib.json");
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -122,27 +137,97 @@ public class RobotContainer {
 
   // assign intake button
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 4).whenHeld(
-        new StartEndCommand(() -> {
-          intakeActuation.setSpeed(-0.25);
-        }, () -> {
-          rigidClimbers.setSpeed(0);
-        }, rigidClimbers));
+    // new JoystickButton(driverController, 4).whenHeld(
+    // new StartEndCommand(() -> {
+    // if (intakeActuation == null) {
+    // intakeActuation = new IntakeActuation();
+    // }
+    // intakeActuation.setSpeed(-0.25);
+    // }, () -> {
+    // rigidClimbers.setSpeed(0);
+    // }, rigidClimbers));
 
-    new JoystickButton(driverController, 2).whenHeld(
-        new StartEndCommand(() -> {
-          intakeActuation.setSpeed(0.25);
-        }, () -> {
-          rigidClimbers.setSpeed(0);
-        }, rigidClimbers));
+    // new JoystickButton(driverController, 2).whenHeld(
+    // new StartEndCommand(() -> {
+    // if (intakeActuation == null) {
+    // intakeActuation = new IntakeActuation();
+    // }
+    // intakeActuation.setSpeed(0.25);
+    // }, () -> {
+    // rigidClimbers.setSpeed(0);
+    // }, rigidClimbers));
 
-    new JoystickButton(driverController, 1).whileActiveOnce(new RollersIn(intakeShooter, indexer));
+    // new JoystickButton(driverController, 1).whileActiveOnce(new
+    // RollersIn(intakeShooter, indexer));
 
-    new JoystickButton(driverController, 2).whileActiveOnce(new Shoot(intakeShooter, indexer));
+    // new JoystickButton(driverController, 3).whileActiveOnce(new
+    // Shoot(intakeShooter, indexer));
 
-    new JoystickButton(driverController, 5).whileActiveOnce(new PrintCommand("halfway shoot")); // TODO
+    // new JoystickButton(driverController, 5).whileActiveOnce(new
+    // PrintCommand("halfway shoot")); // TODO
 
-    new JoystickButton(driverController, 6).whileActiveOnce(new DownAndIn(intakeActuation, intakeShooter, indexer));
+    // new JoystickButton(driverController, 5).whenPressed(new InstantCommand(() ->
+    // this.toggleFocState()));
+
+    // new JoystickButton(driverController, 6).whileActiveOnce(new InstantCommand(()
+    // -> {
+    // if (intakeActuation == null) {
+    // intakeActuation = new IntakeActuation();
+    // }
+    // (new DownAndIn(intakeActuation, intakeShooter, indexer)).schedule();
+    // }));
+
+    /*
+     * new JoystickButton(buttonBoard, 4).whenHeld(
+     * new StartEndCommand(() -> {
+     * rigidClimbers.setSpeed(0.25);
+     * }, () -> {
+     * rigidClimbers.setSpeed(0);
+     * }, rigidClimbers));
+     * 
+     * new JoystickButton(buttonBoard, 7).whenHeld(
+     * new StartEndCommand(() -> {
+     * rigidClimbers.setSpeed(-0.25);
+     * }, () -> {
+     * rigidClimbers.setSpeed(0);
+     * }, rigidClimbers));
+     * 
+     * new JoystickButton(buttonBoard, 3).whenHeld(
+     * new StartEndCommand(() -> {
+     * rotatingClimbers.setSpeed(0.25);
+     * }, () -> {
+     * rotatingClimbers.setSpeed(0);
+     * }, rigidClimbers));
+     * 
+     * new JoystickButton(buttonBoard, 1).whenHeld(
+     * new StartEndCommand(() -> {
+     * rotatingClimbers.setSpeed(-0.25);
+     * }, () -> {
+     * rotatingClimbers.setSpeed(0);
+     * }, rigidClimbers));
+     */
+
+    // new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(() -> {
+    // if (intakeActuation == null) {
+    // intakeActuation = new IntakeActuation();
+    // }
+    // intakeActuation.setPositionUp();
+    // }));
+
+    // new JoystickButton(buttonBoard, 12).whenPressed(new InstantCommand(() -> {
+    // if (intakeActuation == null) {
+    // intakeActuation = new IntakeActuation();
+    // }
+    // intakeActuation.setPositionDown();
+    // leftActuation.setSpeed(1.0);
+    // }));
+
+    // new JoystickButton(buttonBoard, 12).whenHeld(
+    // new StartEndCommand(() -> {
+    // leftActuation.setSpeed(1.00);
+    // }, () -> {
+    // leftActuation.setSpeed(0);
+    // }, rigidClimbers));
 
     new JoystickButton(buttonBoard, 6).whenPressed(new ClimbMid(rigidClimbers, rotatingClimbers));
 
@@ -152,16 +237,18 @@ public class RobotContainer {
 
     new JoystickButton(buttonBoard, 4).whenHeld(
         new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(0.25);
+          rigidClimbers.setSpeed(0.8);
         }, () -> {
           rigidClimbers.setSpeed(0);
+          SmartDashboard.putNumber("climber rigid value", rigidClimbers.getEncoderValue());
         }, rigidClimbers));
 
     new JoystickButton(buttonBoard, 7).whenHeld(
         new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(-0.25);
+          rigidClimbers.setSpeed(-0.8);
         }, () -> {
           rigidClimbers.setSpeed(0);
+          SmartDashboard.putNumber("climber rigid value", rigidClimbers.getEncoderValue());
         }, rigidClimbers));
 
     new JoystickButton(buttonBoard, 3).whenHeld(
@@ -178,51 +265,13 @@ public class RobotContainer {
           rotatingClimbers.setSpeed(0);
         }, rigidClimbers));
 
-    new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(intakeActuation::setPositionUp));
+    // new JoystickButton(buttonBoard, 11).whenPressed(new
+    // InstantCommand(intakeActuation::setPositionUp));
 
-    new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(intakeActuation::setPositionDown));
+    // new JoystickButton(buttonBoard, 12).whenPressed(new
+    // InstantCommand(intakeActuation::setPositionDown));
 
-    new JoystickButton(buttonBoard, 12).whenPressed(new PrintCommand("climb traversal"));
-
-    new JoystickButton(buttonBoard, 6).whenPressed(new ClimbMid(rigidClimbers, rotatingClimbers));
-
-    new JoystickButton(buttonBoard, 5).whenPressed(new ClimbStep(rigidClimbers, rotatingClimbers));
-
-    new JoystickButton(buttonBoard, 8).whenPressed(new ClimbTraversal(rigidClimbers, rotatingClimbers));
-
-    new JoystickButton(buttonBoard, 4).whenHeld(
-        new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(0.25);
-        }, () -> {
-          rigidClimbers.setSpeed(0);
-        }, rigidClimbers));
-
-    new JoystickButton(buttonBoard, 7).whenHeld(
-        new StartEndCommand(() -> {
-          rigidClimbers.setSpeed(-0.25);
-        }, () -> {
-          rigidClimbers.setSpeed(0);
-        }, rigidClimbers));
-
-    new JoystickButton(buttonBoard, 3).whenHeld(
-        new StartEndCommand(() -> {
-          rotatingClimbers.setSpeed(0.25);
-        }, () -> {
-          rotatingClimbers.setSpeed(0);
-        }, rigidClimbers));
-
-    new JoystickButton(buttonBoard, 1).whenHeld(
-        new StartEndCommand(() -> {
-          rotatingClimbers.setSpeed(-0.25);
-        }, () -> {
-          rotatingClimbers.setSpeed(0);
-        }, rigidClimbers));
-
-    new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(intakeActuation::setPositionUp));
-
-    new JoystickButton(buttonBoard, 11).whenPressed(new InstantCommand(intakeActuation::setPositionDown));
-
-    new JoystickButton(buttonBoard, 12).whenPressed(new ClimbTraversal(rigidClimbers, rotatingClimbers));
+    new JoystickButton(buttonBoard, 2).whenPressed(new StopClimbers(rigidClimbers, rotatingClimbers));
 
     // private void configureButtonBindings() {
     // new JoystickButton(driverController, 1).whileActiveOnce(
@@ -274,11 +323,11 @@ public class RobotContainer {
     // }, rigidClimbers));
 
     // new JoystickButton(driverController, 4).whenHeld(
-    //     new StartEndCommand(() -> {
-    //       rigidClimbers.setSpeed(-0.25);
-    //     }, () -> {
-    //       rigidClimbers.setSpeed(0);
-    //     }, rigidClimbers));
+    // new StartEndCommand(() -> {
+    // rigidClimbers.setSpeed(-0.25);
+    // }, () -> {
+    // rigidClimbers.setSpeed(0);
+    // }, rigidClimbers));
 
     // assign button to rotate arm forward when held
     // new JoystickButton(driverController, 5).whenHeld(
@@ -322,25 +371,35 @@ public class RobotContainer {
     // new InstantCommand(intakerRod.SpinIntakerIn())
     // );
 
-    new JoystickButton(buttonBoard, 3)
-        .whenHeld(new DownAndIn(intakeActuation, intakeShooter, indexer)); // not acc port 3
-    new JoystickButton(buttonBoard, 4).whenHeld(new Shoot(intakeShooter, indexer));
-    new JoystickButton(buttonBoard, 5)
-        .whenHeld(new BackwardsShoot(intakeActuation, intakeShooter, indexer));
-    new JoystickButton(buttonBoard, 6).whenPressed(new RunCommand(intakeActuation::setPositionUp));
-    new JoystickButton(buttonBoard, 7)
-        .whenPressed(new RunCommand(intakeActuation::setPositionDown));
-    new JoystickButton(buttonBoard, 8).whenPressed(new RunCommand(intakeActuation::setPositionUp));
-    new JoystickButton(buttonBoard, 9).whenPressed(new ClimbMid(rigidClimbers, rotatingClimbers));
-    new JoystickButton(buttonBoard, 10).whenPressed(new ClimbStep(rigidClimbers, rotatingClimbers));
-    new JoystickButton(buttonBoard, 11).whenPressed(new ClimbHigh(rigidClimbers, rotatingClimbers));
-    new JoystickButton(buttonBoard, 12).whenPressed(new RunCommand(rigidClimbers::upHalfSpeed));
-    new JoystickButton(buttonBoard, 13).whenPressed(new RunCommand(rigidClimbers::downHalfSpeed));
-    new JoystickButton(buttonBoard, 14).whenPressed(new RunCommand(rotatingClimbers::upHalfSpeed));
-    new JoystickButton(buttonBoard, 15)
-        .whenPressed(new RunCommand(rotatingClimbers::downHalfSpeed));
-    new JoystickButton(buttonBoard, 16)
-        .whenPressed(new StopClimbers(rigidClimbers, rotatingClimbers));
+    // new JoystickButton(buttonBoard, 3)
+    // .whenHeld(new DownAndIn(intakeActuation, intakeShooter, indexer)); // not acc
+    // port 3
+    // new JoystickButton(buttonBoard, 4).whenHeld(new Shoot(intakeShooter,
+    // indexer));
+    // new JoystickButton(buttonBoard, 5)
+    // .whenHeld(new BackwardsShoot(intakeActuation, intakeShooter, indexer));
+    // new JoystickButton(buttonBoard, 6).whenPressed(new
+    // RunCommand(intakeActuation::setPositionUp));
+    // new JoystickButton(buttonBoard, 7)
+    // .whenPressed(new RunCommand(intakeActuation::setPositionDown));
+    // new JoystickButton(buttonBoard, 8).whenPressed(new
+    // RunCommand(intakeActuation::setPositionUp));
+    // new JoystickButton(buttonBoard, 9).whenPressed(new ClimbMid(rigidClimbers,
+    // rotatingClimbers));
+    // new JoystickButton(buttonBoard, 10).whenPressed(new ClimbStep(rigidClimbers,
+    // rotatingClimbers));
+    // new JoystickButton(buttonBoard, 11).whenPressed(new ClimbHigh(rigidClimbers,
+    // rotatingClimbers));
+    // new JoystickButton(buttonBoard, 12).whenPressed(new
+    // RunCommand(rigidClimbers::upHalfSpeed));
+    // new JoystickButton(buttonBoard, 13).whenPressed(new
+    // RunCommand(rigidClimbers::downHalfSpeed));
+    // new JoystickButton(buttonBoard, 14).whenPressed(new
+    // RunCommand(rotatingClimbers::upHalfSpeed));
+    // new JoystickButton(buttonBoard, 15)
+    // .whenPressed(new RunCommand(rotatingClimbers::downHalfSpeed));
+    // new JoystickButton(buttonBoard, 16)
+    // .whenPressed(new StopClimbers(rigidClimbers, rotatingClimbers));
 
   }
 
@@ -350,12 +409,17 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
-
-
-
-   
   // follow trajectory with PID
-  // public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
+    return new SimpleShoot(
+        this.robotDrive
+    // nvm this.robotContainer.intakeActuation,
+    // this.indexer,
+    // this.intakeShooter,
+    // this.leftActuation
+    );
+  }
+
   // Create config for trajectory
   // TrajectoryConfig config = new TrajectoryConfig(
   // AutoConstants.kMaxSpeedMetersPerSecond,

@@ -15,7 +15,7 @@ public class ShootWithWait extends SequentialCommandGroup {
                                                 indexer::indexerOut,
                                                 indexer::stop,
                                                 indexer),
-                                new WaitCommand(2),
+                                new WaitCommand(0.5),
                                 new StartEndCommand(
                                                 intakeShooter::shootOut,
                                                 intakeShooter::stop,

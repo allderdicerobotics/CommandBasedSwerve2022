@@ -16,14 +16,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.ThriftyEncoder;
+
+import java.util.function.*;
 
 public class DriveSubsystem extends SubsystemBase {
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
+
+  private boolean overrideFocState = false;
 
   // set up swerve modules
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
@@ -90,9 +95,24 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    */
 
+  public boolean evalFocOverride(boolean prior) {
+    return (this.overrideFocState ? true : prior);
+  }
+
+  public void toggleFocOverride() {
+    System.out.println("TOGGLED DRIVESUBSYSTEM FOC OVERRIDE");
+    this.overrideFocState = !this.overrideFocState;
+  }
+
   // Field oriented control
   @SuppressWarnings("ParameterName")
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelativeGiven) {
+    boolean fieldRelative = this.evalFocOverride(fieldRelativeGiven);
+    System.out.printf("<recv FOC:%s>", fieldRelative ? false : true);
+    System.out.println("IN DRIVE");
+    System.out.printf(
+        "drive params: xSpeed=%4f, ySpeed=%f, rot=%4f\n",
+        xSpeed, ySpeed, rot);
     var swerveModuleStates = DriveConstants.kinematics
         .toSwerveModuleStates(
             fieldRelative
@@ -132,7 +152,43 @@ public class DriveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Joystick Y Speed", leftY);
     // SmartDashboard.putNumber("Joystick Rotation", rightX);
 
+    // System.out.printf("x=%s, y=%s, rot=%s, fr=%s", xSpeed, ySpeed, rot,
+    // fieldRelative);
+
+    // System.out.println("IN DRIVEWITHJOYSTICK");
+
+    // SmartDashboard.putNumber("Joystick thing", 2);
+
+    /*
+     * SmartDashboard.putString("Joystick data", String.format(
+     * "xs=%4d, ys=%4d, rots=%4d, fr=%s",
+     * xSpeed, ySpeed, rot, (fieldRelative ? "t" : "f")));
+     */
+
     this.drive(xSpeed, ySpeed, rot, fieldRelative);
+  }
+
+  // drive accorsing to joystick
+  public void driveWithJoystick(double leftX, double leftY, double rightX, Supplier<Boolean> fieldRelativeFn) {
+    // Get the x speed. We are inverting this because Playstation controllers return
+    // negative values when we push forward.
+    final var xSpeed = xspeedLimiter.calculate(MathUtil.applyDeadband(leftX, 0.1)) * DriveConstants.kMaxSpeed;
+
+    // Get the y speed or sideways/strafe speed. We are inverting this because
+    // we want a positive value when we pull to the left.
+    final var ySpeed = -yspeedLimiter.calculate(MathUtil.applyDeadband(leftY, 0.1)) * DriveConstants.kMaxSpeed;
+
+    // Get the rate of angular rotation. We are inverting this because we want a
+    // positive value when we pull to the left (remember, CCW is positive in
+    // mathematics).
+    final var rot = -rotLimiter.calculate(MathUtil.applyDeadband(rightX, 0.05))
+        * DriveConstants.kMaxAngularSpeed;
+
+    // SmartDashboard.putNumber("Joystick X Speed", leftX);
+    // SmartDashboard.putNumber("Joystick Y Speed", leftY);
+    // SmartDashboard.putNumber("Joystick Rotation", rightX);
+
+    this.drive(xSpeed, ySpeed, rot, fieldRelativeFn.get());
   }
 
   public void stop() {

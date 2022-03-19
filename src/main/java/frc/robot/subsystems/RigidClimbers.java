@@ -42,19 +42,36 @@ public class RigidClimbers extends SubsystemBase {
                 return (leftError < ClimberConstants.rigidPIDTolerance
                                 && rightError < ClimberConstants.rigidPIDTolerance);
         }
-        // PID
+        // PID4
+
+        /*
+         * public boolean isAtLegalMax(boolean isLeft) {
+         * if (isLeft) {
+         * return leftRigidClimber.getEncoder().getPosition() >=
+         * ClimberConstants.RIGID_CLIMBER_LEGAL_MAX;
+         * } else {
+         * return rightRigidClimber.getEncoder().getPosition() >=
+         * ClimberConstants.RIGID_CLIMBER_LEGAL_MAX;
+         * }
+         * }
+         */
 
         public void setPosition(double desiredPosition) {
                 this.currentSetpoint = desiredPosition;
                 var leftPID = leftRigidClimber.getPIDController();
-                leftPID.setOutputRange(-0.5, 0.5);
+                leftPID.setOutputRange(-0.75, 0.75);
                 leftPID.setReference(desiredPosition - leftMotorOffset,
                                 ControlType.kPosition);
                 var rightPID = rightRigidClimber.getPIDController();
-                rightPID.setOutputRange(-0.5, 0.5);
+                rightPID.setOutputRange(-0.75, 0.75);
                 rightPID.setReference(desiredPosition - rightMotorOffset,
                                 ControlType.kPosition);
         }
+
+        public double getEncoderValue() {
+                return leftRigidClimber.getEncoder().getPosition();
+        }
+
         // setting position
 
         public double getLeftCurrent() {

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -24,6 +25,22 @@ public class IntakeActuation extends ProfiledPIDSubsystem {
       MotorType.kBrushless);
 
   private DutyCycleEncoder actuationEncoder;
+
+  /*
+   * public IntakeActuation setAltFrameConfig(int altFrameConfig) {
+   * if (altFrameConfig > 0) {
+   * this.leadingActuationMotor.setControlFramePeriodMs(altFrameConfig);
+   * for (PeriodicFrame fT : PeriodicFrame.values()) {
+   * this.leadingActuationMotor.setPeriodicFramePeriod(fT, altFrameConfig);
+   * }
+   * this.followingActuationMotor.setControlFramePeriodMs(altFrameConfig);
+   * for (PeriodicFrame fT : PeriodicFrame.values()) {
+   * this.followingActuationMotor.setPeriodicFramePeriod(fT, altFrameConfig);
+   * }
+   * }
+   * return this;
+   * }
+   */
 
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
