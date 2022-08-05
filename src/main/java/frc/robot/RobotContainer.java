@@ -137,7 +137,7 @@ public class RobotContainer {
 
   // assign intake button
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 5).whenPressed(new InstantCommand(() -> {
+    new JoystickButton(driverController, 6).whenPressed(new InstantCommand(() -> {
       this.robotDrive.toggleFocOverride();
       System.out.println("TOGGLED");
     }));
@@ -308,7 +308,8 @@ public class RobotContainer {
 
     // new JoystickButton(driverController, 3)
     // .whenPressed(new steppt2(rigidClimbers, rotatingClimbers));
-
+    // new JoystickButton(driverController, 6)
+    //     .whenPressed(new InstantCommand(DriveSubsystem::toggleFocOverride, DriveSubsystem));
     // assign lift intake button
     // new JoystickButton(driverController, 2)
     // .whenPressed(new ClimbStep(rigidClimbers, rotatingClimbers));

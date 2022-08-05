@@ -24,15 +24,15 @@ public final class Constants {
     public static final double kMaxSpeed = 3.0; // meters per second
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-    public static final int kFrontLeftDriveMotorPort = 10;
-    public static final int kRearLeftDriveMotorPort = 11;
-    public static final int kFrontRightDriveMotorPort = 12;
-    public static final int kRearRightDriveMotorPort = 13;
+    public static final int kFrontLeftDriveMotorPort = 5;
+    public static final int kRearLeftDriveMotorPort = 10;
+    public static final int kFrontRightDriveMotorPort = 3;
+    public static final int kRearRightDriveMotorPort = 12;
 
-    public static final int kFrontLeftTurningMotorPort = 14;
-    public static final int kRearLeftTurningMotorPort = 15;
-    public static final int kFrontRightTurningMotorPort = 16;
-    public static final int kRearRightTurningMotorPort = 17;
+    public static final int kFrontLeftTurningMotorPort = 6;
+    public static final int kRearLeftTurningMotorPort = 9;
+    public static final int kFrontRightTurningMotorPort = 4;
+    public static final int kRearRightTurningMotorPort = 11;
     public static final boolean kGyroReversed = false;
 
     public static final Translation2d frontLeftLocation = new Translation2d(-0.381, 0.381); // TODO
@@ -73,9 +73,9 @@ public final class Constants {
   }
 
   public static final class ClimberConstants { // rotates ~0-40
-    public static final int rightRigidClimberPort = 8;
-    public static final int leftRigidClimberPort = 9;
-    public static final int rightRotatingClimberPort = 6;
+    public static final int rightRigidClimberPort = 1;
+    public static final int leftRigidClimberPort = 8;
+    public static final int rightRotatingClimberPort = 2;
     public static final int leftRotatingClimberPort = 7;
 
     // public static final int leftRigidLimitSwitchPort = 5;
